@@ -133,27 +133,35 @@ canvas.cell{width:100%;max-width:100%;height:auto;background:var(--paper2);borde
 .legend span{display:flex;align-items:center;gap:8px}
 .legend i{width:16px;height:16px;border-radius:4px;display:inline-block;flex:none}
 /* studio */
-.studio{display:grid;grid-template-columns:150px minmax(0,1fr) 260px;gap:12px}
+.studio{display:grid;grid-template-columns:190px minmax(0,1fr) 250px;gap:12px}
 @media (max-width:1100px){.studio{grid-template-columns:1fr}.tools{flex-direction:row;flex-wrap:wrap}.stamps{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}}
 .tools{display:flex;flex-direction:column;gap:6px}
 .tools button,.stamps button{border:2px solid var(--line);background:var(--paper);border-radius:9px;padding:.4em .6em;font-weight:700;color:var(--navy);text-align:left;font-size:.85rem;display:flex;align-items:center;gap:.4em;min-width:0;line-height:1.2}
 .tools button.on,.stamps button.on{background:var(--carolina);color:#fff;border-color:var(--carolina)}
-.stamps{display:grid;grid-template-columns:1fr;gap:6px}
-.stamps button{flex-direction:column;align-items:center;text-align:center;padding:6px 4px;font-size:.76rem;line-height:1.15;gap:.3em}
-.stamps canvas{width:84px;height:60px;background:#fff;border-radius:6px}
-.toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
-.toolbar button[data-tool],.toolbar .tb{border:2px solid var(--line);background:var(--paper);border-radius:9px;padding:.35em .6em;font-weight:700;color:var(--navy);font-size:.82rem;display:inline-flex;align-items:center;gap:.35em;line-height:1.2}
+.stamps{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.stamps button{flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:5px 3px;font-size:.7rem;line-height:1.15;gap:.25em}
+.stamps canvas{width:64px;height:46px;background:#fff;border-radius:6px}
+.stage{max-height:max(320px,45vh);margin:0 auto}
+
+.tips{margin:0 0 10px;padding:6px 14px}
+.tips summary{display:flex;align-items:center;gap:.4em;font-size:.95rem}
+.tips .marty{margin:8px 0 4px}
+.toolbar{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px}
+.toolbar+.toolbar{margin-top:5px}
+.toolbar button[data-tool],.toolbar .tb{border:2px solid var(--line);background:var(--paper);border-radius:9px;padding:.3em .5em;font-weight:700;color:var(--navy);font-size:.78rem;display:inline-flex;align-items:center;gap:.3em;line-height:1.2}
 .toolbar button.on{background:var(--carolina);color:#fff;border-color:var(--carolina)}
 .toolbar .sep{width:2px;height:26px;background:var(--line);margin:0 2px}
-.toolbar .swatches button{width:20px;height:20px}
+.toolbar .swatches{gap:4px}.toolbar .swatches button{width:18px;height:18px}
 .toolbar label.small{display:inline-flex;align-items:center;gap:.4em}
 .toolbar input[type=range]{width:80px}
-.ibtn{width:38px;height:38px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--navy);display:inline-grid;place-items:center;padding:0}
+.ibtn{width:32px;height:32px;border-radius:9px;border:2px solid var(--line);background:var(--paper);color:var(--navy);display:inline-grid;place-items:center;padding:0}
 .ibtn .ic{width:1.3em;height:1.3em}
 .ibtn.bad{color:var(--bad);border-color:var(--bad)}
 .ibtn[aria-pressed="true"]{background:var(--carolina);color:#fff;border-color:var(--carolina)}
-.status{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
-.pchip{font-size:.72rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:.15em .6em;border-radius:999px;background:var(--paper2);color:var(--ink2);border:2px solid var(--line)}
+.status{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px}
+.pchip{font:inherit;font-size:.74rem;font-weight:800;padding:.15em .5em .15em .6em;border-radius:999px;background:var(--paper);color:var(--ink2);border:2px solid var(--line);cursor:pointer;display:inline-flex;align-items:center;justify-content:space-between;gap:.35em;min-width:0}
+.pchip b{font-family:var(--mono);font-weight:700;background:var(--paper2);border-radius:999px;padding:0 .45em;font-size:.75rem}
+.pchip.on{border-color:var(--carolina);color:var(--navy)}
 .pchip.ok{background:rgba(46,158,91,.18);color:var(--good);border-color:var(--good)}
 .fcount{margin-left:auto;font-family:var(--mono);font-weight:700;font-size:.85rem;color:var(--navy)}
 #guide select{width:100%;font-weight:800;color:var(--navy)}
@@ -166,7 +174,7 @@ canvas.cell{width:100%;max-width:100%;height:auto;background:var(--paper2);borde
 .filmstrip .fr.on{border-color:var(--carolina)}
 .filmstrip .fr img{display:block;width:100%;height:72px;object-fit:cover}
 .filmstrip .fr .n{position:absolute;left:3px;top:2px;font-size:.7rem;font-weight:900;color:#fff;background:rgba(0,0,0,.55);border-radius:4px;padding:0 5px}
-.filmstrip .fr .ph{display:block;font-size:.66rem;font-weight:800;color:var(--navy);background:var(--paper2);padding:1px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.filmstrip .fr .ph{display:block;font-size:.74rem;font-weight:800;color:#15345A;background:var(--paper2);padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .swatches{display:flex;flex-wrap:wrap;gap:5px}
 .swatches button{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
 .swatches button.on{box-shadow:0 0 0 3px var(--carolina)}
@@ -1222,6 +1230,7 @@ const PHASE_GUIDE={
  Cytokinesis:'Finish the split: pinch all the way to two daughter cells, each with its own nucleus and chromatin.'
 };
 const MIN_FRAMES=50;
+const PHASE_TINT={Interphase:'#bfe3fb',Prophase:'#fde68a',Metaphase:'#c9f0d6',Anaphase:'#fbd0d4',Telophase:'#e9d5ff',Cytokinesis:'#fed7aa'};
 function studioRubric(frames){
   const tagged=frames.map(f=>f.phase).filter(Boolean); const seq=tagged.filter((p,i)=>i===0||p!==tagged[i-1]); const orderOk=seq.length===6&&seq.every((p,i)=>p===PHASES[i]);
   const done=PHASES.map(p=>frames.some(f=>f.phase===p&&(phaseChecks(f)||[]).every(c=>c[1])));
@@ -1236,21 +1245,21 @@ function studioRubric(frames){
 const PALETTE=['#dff1fb','#2a6f9e','#15345A','#4B9CD3','#87CEEB','#7c3aed','#c026d3','#e11d48','#f59e0b','#fde9b8','#c98a1e','#fde047','#22c55e','#a16207','#000000','#ffffff'];
 function L1_studio(V){
   const ST=S.l1.studio; ST.frames.forEach(migrateFrame); if(!ST.frames.length){ST.frames.push(newFrame());ST.cur=0;} ST.cur=Math.min(ST.cur||0,ST.frames.length-1);
-  V.innerHTML=`<div class="card"><div class="eyebrow">Level 1 · Stop-Motion Studio</div><h2>Make your mitosis movie</h2><div id="mHost"></div>
+  V.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h2 style="margin:0">Make your mitosis movie</h2><button class="hintbtn" type="button" id="tipsBtn" aria-expanded="false">${ico('bulb')} Tips from Marty</button></div><div id="tipsBox" hidden><div id="mHost"></div></div>
   <div class="studio">
     <div>
       <div class="eyebrow">Stamps · tap one, then tap the stage</div><div class="stamps" id="stamps">${STAMP_DEFS.map(s=>`<button data-stamp="${s.type}" title="${esc(s.tip)}"><canvas width="84" height="60" data-pv="${s.type}"></canvas><span>${s.label}</span></button>`).join('')}</div>
     </div>
     <div>
       <div class="stage" id="stage"><canvas class="onion" id="onion" width="${CW}" height="${CH}"></canvas><canvas id="objs" width="${CW}" height="${CH}"></canvas><canvas id="draw" width="${CW}" height="${CH}"></canvas><canvas id="prev" width="${CW}" height="${CH}"></canvas><div class="hud" id="hud"></div></div>
-      <div class="toolbar" id="tools"><button data-tool="select" class="on" title="Select and move objects">${ico('arrow')} Select</button><button data-tool="pencil" title="Pencil">${ico('pencil')} Pencil</button><button data-tool="line" title="Straight line">${ico('line')} Line</button><button data-tool="fill" title="Fill an area">${ico('fill')} Fill</button><button data-tool="eraser" title="Eraser">${ico('eraser')} Eraser</button><button data-tool="text" title="Add text">${ico('text')} Text</button><span class="sep"></span><div class="swatches" id="sw" title="Ink color"></div><label class="small" title="Brush size">Size <input type="range" id="bsize" min="2" max="30" value="6" aria-label="Brush size"></label><span class="sep"></span><button class="tb" id="undoBtn" title="Undo">${ico('undo')} Undo</button><button class="tb" id="clearBtn" title="Clear this frame">${ico('x')} Clear</button></div>
-      <div class="status" id="status" aria-live="polite"></div>
+      <div class="toolbar" id="tools"><button data-tool="select" class="on" title="Select and move objects">${ico('arrow')} Select</button><button data-tool="pencil" title="Pencil">${ico('pencil')} Pencil</button><button data-tool="line" title="Straight line">${ico('line')} Line</button><button data-tool="fill" title="Fill an area">${ico('fill')} Fill</button><button data-tool="eraser" title="Eraser">${ico('eraser')} Eraser</button><button data-tool="text" title="Add text">${ico('text')} Text</button><span class="sep"></span><button class="tb" id="undoBtn" title="Undo">${ico('undo')} Undo</button><button class="tb" id="clearBtn" title="Clear this frame">${ico('x')} Clear</button></div>
+      <div class="toolbar"><span class="small muted">Ink</span><div class="swatches" id="sw" title="Ink color"></div><label class="small" title="Brush size">Size <input type="range" id="bsize" min="2" max="30" value="6" aria-label="Brush size"></label></div>
       <div class="filmstrip" id="strip"></div>
-      <div class="row" style="gap:6px"><button class="ibtn" id="dupBtn" title="Duplicate this frame" aria-label="Duplicate this frame">${ico('copy')}</button><button class="ibtn" id="addBtn" title="Add a blank frame" aria-label="Add a blank frame">${ico('plus')}</button><button class="ibtn" id="leftBtn" title="Move this frame earlier" aria-label="Move this frame earlier">${ico('left')}</button><button class="ibtn" id="rightBtn" title="Move this frame later" aria-label="Move this frame later">${ico('right')}</button><button class="ibtn bad" id="delBtn" title="Delete this frame" aria-label="Delete this frame">${ico('trash')}</button><button class="ibtn" id="onionBtn" title="Show the previous frame as a ghost" aria-label="Show the previous frame as a ghost" aria-pressed="false" style="margin-left:auto">${ico('eye')}</button><input type="checkbox" id="onionChk" class="sr" aria-hidden="true" tabindex="-1"></div>
-      <div class="row" style="margin-top:8px"><button class="btn sm gold" id="playBtn">${ico('play')} Play</button><label class="small">Speed <input type="range" id="fps" min="1" max="12" value="${ST.fps}" style="width:110px" aria-label="Playback speed"> <span id="fpsLbl">${ST.fps}</span> fps</label><button class="btn sm" id="gifBtn">${ico('download')} Export GIF</button><button class="btn sm" id="vidBtn">${ico('download')} Export video</button></div>
+      <div class="row" style="gap:8px;justify-content:space-between"><div class="row" style="gap:4px"><button class="ibtn" id="dupBtn" title="Duplicate this frame" aria-label="Duplicate this frame">${ico('copy')}</button><button class="ibtn" id="addBtn" title="Add a blank frame" aria-label="Add a blank frame">${ico('plus')}</button><button class="ibtn" id="leftBtn" title="Move this frame earlier" aria-label="Move this frame earlier">${ico('left')}</button><button class="ibtn" id="rightBtn" title="Move this frame later" aria-label="Move this frame later">${ico('right')}</button><button class="ibtn bad" id="delBtn" title="Delete this frame" aria-label="Delete this frame">${ico('trash')}</button><button class="ibtn" id="onionBtn" title="Show the previous frame as a ghost" aria-label="Show the previous frame as a ghost" aria-pressed="false">${ico('eye')}</button><input type="checkbox" id="onionChk" class="sr" aria-hidden="true" tabindex="-1"></div><div class="row" style="gap:5px"><button class="btn sm gold" id="playBtn">${ico('play')} Play</button><label class="small" title="Playback speed" style="white-space:nowrap"><input type="range" id="fps" min="1" max="12" value="${ST.fps}" style="width:60px" aria-label="Playback speed"> <span id="fpsLbl">${ST.fps}</span> fps</label><button class="btn sm" id="gifBtn">${ico('download')} GIF</button><button class="btn sm" id="vidBtn">${ico('download')} Video</button></div></div>
       <div id="exportOut"></div>
     </div>
     <div>
+      <div class="card soft" id="progress" style="margin:0 0 12px;padding:12px 14px"><div class="eyebrow">Progress · ${MIN_FRAMES}-frame goal</div><div class="status" id="status" aria-live="polite"></div></div>
       <div class="card soft" id="props" style="margin:0 0 12px"></div>
       <div class="card soft" id="guide" style="margin:0"><div class="eyebrow">This frame's phase</div><select id="phaseSel" aria-label="Phase shown in this frame"><option value="">— choose phase —</option>${PHASES.map(p=>`<option>${p}</option>`).join('')}</select><div id="guideBody"></div></div>
     </div>
@@ -1268,15 +1277,16 @@ function L1_studio(V){
   function handleAt(px,py){ if(!sel) return null; const o=sel,[w,h]=objBox(o); const dx=px-o.x,dy=py-o.y,c=Math.cos(-(o.rot||0)),s=Math.sin(-(o.rot||0)); const lx=dx*c-dy*s, ly=dx*s+dy*c; if(Math.hypot(lx,ly+h/2+36)<=16) return 'rot'; const corners=[[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]]; if(corners.some(p=>Math.abs(lx-p[0])<=12&&Math.abs(ly-p[1])<=12)) return 'size'; if(Math.abs(lx)<=w/2&&Math.abs(ly)<=h/2) return 'move'; return null; }
   async function showFrame(){ const f=cur(); await Promise.all([loadImg(f.bg),loadImg(f.ink)]); if(ST.cur>0){ const pf=ST.frames[ST.cur-1]; await Promise.all([loadImg(pf.bg),loadImg(pf.ink)]); }
     dctx.clearRect(0,0,CW,CH); if(f.ink){ dctx.drawImage(imgCache[f.ink],0,0); } octx.clearRect(0,0,CW,CH); if($('#onionChk',V).checked&&ST.cur>0){ await composeFrame(octx,ST.frames[ST.cur-1],CW,CH,false); }
-    sel=null; renderObjs(); props(); $('#hud',V).textContent=`Frame ${ST.cur+1} of ${ST.frames.length}${f.phase?' · '+f.phase:''}`; $('#phaseSel',V).value=f.phase; undo=[]; strip(); rub(); }
+    sel=null; renderObjs(); props(); $('#hud',V).textContent=`Frame ${ST.cur+1} of ${ST.frames.length}${f.phase?' · '+f.phase:''}${ST.frames.length<MIN_FRAMES?' · goal '+MIN_FRAMES:''}`; $('#phaseSel',V).value=f.phase; undo=[]; strip(); rub(); }
   function snapshot(){ undo.push({ink:cur().ink,objects:JSON.parse(JSON.stringify(cur().objects))}); if(undo.length>15) undo.shift(); }
   function commitInk(){ const blank=!dctx.getImageData(0,0,CW,CH).data.some((v,i)=>i%4===3&&v>0); cur().ink=blank?null:draw.toDataURL('image/png'); save(); strip(); rub(); }
   function commitObjs(){ save(); renderObjs(); strip(); rub(); }
-  let stripT=null; function strip(){ clearTimeout(stripT); stripT=setTimeout(async()=>{ const c=document.createElement('canvas'); c.width=192;c.height=144; const x=c.getContext('2d'); const thumbs=[]; for(const f of ST.frames){ await composeFrame(x,f,192,144); thumbs.push(c.toDataURL('image/jpeg',0.7)); } $('#strip',V).innerHTML=ST.frames.map((f,i)=>`<button class="fr ${i===ST.cur?'on':''}" data-i="${i}"><img src="${thumbs[i]}" alt="frame ${i+1}"><span class="n">${i+1}</span><span class="ph">${f.phase||'unlabeled'}</span></button>`).join(''); $$('.fr',$('#strip',V)).forEach(b=>b.onclick=()=>{ST.cur=+b.dataset.i;save();showFrame();}); const on=$('.fr.on',V); if(on) on.scrollIntoView({inline:'nearest',block:'nearest'}); },60); }
+  let stripT=null; function strip(){ clearTimeout(stripT); stripT=setTimeout(async()=>{ const c=document.createElement('canvas'); c.width=192;c.height=144; const x=c.getContext('2d'); const thumbs=[]; for(const f of ST.frames){ await composeFrame(x,f,192,144); thumbs.push(c.toDataURL('image/jpeg',0.7)); } $('#strip',V).innerHTML=ST.frames.map((f,i)=>`<button class="fr ${i===ST.cur?'on':''}" data-i="${i}"><img src="${thumbs[i]}" alt="frame ${i+1}"><span class="n">${i+1}</span><span class="ph" style="${f.phase?'background:'+PHASE_TINT[f.phase]:''}">${f.phase||'unlabeled'}</span></button>`).join(''); $$('.fr',$('#strip',V)).forEach(b=>b.onclick=()=>{ST.cur=+b.dataset.i;save();showFrame();}); const st=$('#strip',V), on=$('.fr.on',V); if(on){ const l=on.offsetLeft-st.scrollLeft, r=l+on.offsetWidth; if(l<0||r>st.clientWidth) st.scrollLeft=on.offsetLeft-st.clientWidth/2+on.offsetWidth/2; } },60); }
   function guide(){ const f=cur(); const G=$('#guideBody',V); if(!f.phase){ G.innerHTML=`<div class="small muted" style="margin-top:8px">Choose this frame's phase to see what should be happening and a short checklist.</div>`; return; } const ch=phaseChecks(f)||[]; const done=ch.filter(c=>c[1]).length; const n=ST.frames.filter(x=>x.phase===f.phase).length;
     G.innerHTML=`<p class="small" style="margin:8px 0">${PHASE_GUIDE[f.phase]}</p><div class="rubric">${ch.map(c=>`<div><span class="${c[1]?'ok':'no'}">${c[1]?ico('check'):'○'}</span><span>${c[0]}</span></div>`).join('')}</div><div class="small muted" style="margin-top:6px">${done===ch.length?`Every part of ${f.phase} is here. Duplicate the frame and keep the motion going.`:`${done} of ${ch.length} parts in place on this frame.`}</div>${n<6?`<div class="small muted" style="margin-top:6px">${f.phase} has ${n} frame${n===1?'':'s'} so far; aim for at least 6 so the motion is visible.</div>`:''}`; }
-  function rub(){ guide(); const r=studioRubric(ST.frames); $('#status',V).innerHTML=PHASES.map((p,i)=>`<span class="pchip ${r.items[i].ok?'ok':''}" title="${p}${r.items[i].ok?': complete':''}">${['Inter','Pro','Meta','Ana','Telo','Cyto'][i]}</span>`).join('')+`<span class="fcount">${ST.frames.length} / ${MIN_FRAMES} frames</span>`; }
-  function props(){ const P=$('#props',V); if(!sel){ P.innerHTML=`<div class="eyebrow">Selected object</div><div class="small muted">Tap a stamp on the stage to change its opacity, size, rotation, pinch or colors.</div>`; return; } const d=STAMP_DEFS.find(x=>x.type===sel.type)||STAMP_DEFS[0]; const sw=(key,cur)=>`<div class="swatches">${PALETTE.map(c=>`<button data-pc="${key}" data-c="${c}" style="background:${c}" class="${c===cur?'on':''}" aria-label="${c}"></button>`).join('')}</div>`;
+  function rub(){ guide(); const r=studioRubric(ST.frames); const curPh=cur().phase; $('#status',V).innerHTML=PHASES.map((p,i)=>{ const n=ST.frames.filter(f=>f.phase===p).length; return `<button type="button" class="pchip ${r.items[i].ok?'ok':''} ${p===curPh?'on':''}" data-ph="${p}" title="${r.items[i].ok?p+' is complete. ':''}${n?'Jump to the first '+p+' frame':'No '+p+' frames yet'}">${p} <b>${n}</b></button>`; }).join('');
+    $$('.pchip',V).forEach(b=>b.onclick=()=>{ const i=ST.frames.findIndex(f=>f.phase===b.dataset.ph); if(i<0){ toast(`No frames labeled ${b.dataset.ph} yet. Pick it in the phase panel for this frame.`); return; } ST.cur=i; save(); showFrame(); }); }
+  function props(){ const P=$('#props',V); if(!sel){ P.style.padding='10px 14px'; P.innerHTML=`<div class="small muted">Tap a stamp on the stage to change its opacity, size, rotation, pinch or colors.</div>`; return; } P.style.padding=''; const d=STAMP_DEFS.find(x=>x.type===sel.type)||STAMP_DEFS[0]; const sw=(key,cur)=>`<div class="swatches">${PALETTE.map(c=>`<button data-pc="${key}" data-c="${c}" style="background:${c}" class="${c===cur?'on':''}" aria-label="${c}"></button>`).join('')}</div>`;
     P.innerHTML=`<div class="eyebrow">Selected: ${d.label}</div><p class="small muted" style="margin:0 0 6px">${d.tip}</p><label class="small">Opacity <b id="opV">${Math.round((sel.opacity==null?1:sel.opacity)*100)}%</b><input type="range" id="pOp" min="0" max="100" value="${Math.round((sel.opacity==null?1:sel.opacity)*100)}"></label><label class="small">Size <input type="range" id="pSz" min="15" max="220" value="${sel.size}"></label><label class="small">Rotation <b id="rotV">${Math.round((sel.rot||0)*180/Math.PI)}°</b><input type="range" id="pRot" min="0" max="360" value="${((Math.round((sel.rot||0)*180/Math.PI)%360)+360)%360}"></label>${sel.type==='cell'?`<label class="small">Pinch (cleavage furrow) <b id="pinV">${Math.round((sel.pinch||0)*100)}%</b><input type="range" id="pPin" min="0" max="100" value="${Math.round((sel.pinch||0)*100)}"></label>`:''}<div class="small" style="margin-top:6px">${sel.type==='chromosome'?'Chromatid 1 color':sel.type==='cell'?'Cytoplasm color':sel.type==='nucleus'?'Fill color':'Color'}</div>${sw('color',sel.color)}${['chromosome','cell','nucleus','centrosome'].includes(sel.type)?`<div class="small" style="margin-top:6px">${sel.type==='chromosome'?'Chromatid 2 color':sel.type==='cell'?'Membrane color':'Outline color'}</div>${sw('color2',sel.color2)}`:''}<div class="row" style="margin-top:8px"><button class="btn sm sec" id="oDup">${ico('copy')} Duplicate</button><button class="btn sm sec" id="oFront">To front</button><button class="btn sm bad" id="oDel">${ico('trash')} Delete</button></div>`;
     const live=(id,fn)=>{ const e=$(id,P); if(e) e.oninput=ev=>{ fn(+ev.target.value); renderObjs(); }; if(e) e.onchange=()=>{ save(); strip(); rub(); }; };
     live('#pOp',v=>{sel.opacity=v/100;$('#opV',P).textContent=v+'%';}); live('#pSz',v=>{sel.size=v;}); live('#pRot',v=>{sel.rot=v*Math.PI/180;$('#rotV',P).textContent=v+'°';}); live('#pPin',v=>{sel.pinch=v/100;$('#pinV',P).textContent=v+'%';});
@@ -1309,6 +1319,7 @@ function L1_studio(V){
   function openText(x,y){ modal(`<h3>Add text</h3><input type="text" id="txtIn" placeholder="e.g. Metaphase, nucleus, spindle…" style="width:100%"><label class="small">Size <input type="range" id="txtSz" min="14" max="60" value="28"></label><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn sec" id="tCancel">Cancel</button><button class="btn" id="tOk">Place</button></div>`,{onOpen:b=>$('#txtIn',b).focus()}); $('#tCancel').onclick=closeModal; const place=()=>{const t=$('#txtIn').value.trim(); if(t){ dctx.font=`700 ${$('#txtSz').value}px "Atkinson Hyperlegible", sans-serif`; dctx.fillStyle=color; dctx.textBaseline='middle'; dctx.fillText(t,x,y); commitInk(); } closeModal();}; $('#tOk').onclick=place; $('#txtIn').addEventListener('keydown',e=>{if(e.key==='Enter')place();}); }
   $('#undoBtn',V).onclick=async()=>{ if(!undo.length){toast('Nothing to undo on this frame.');return;} const u=undo.pop(); cur().ink=u.ink; cur().objects=u.objects; sel=null; await loadImg(cur().ink); dctx.clearRect(0,0,CW,CH); if(cur().ink) dctx.drawImage(imgCache[cur().ink],0,0); commitObjs(); props(); save(); };
   $('#clearBtn',V).onclick=()=>confirmBox('Clear everything on this frame?',()=>{ snapshot(); cur().objects=[]; cur().ink=null; cur().bg=null; sel=null; dctx.clearRect(0,0,CW,CH); commitObjs(); props(); });
+  $('#tipsBtn',V).onclick=()=>{ const b=$('#tipsBox',V); b.hidden=!b.hidden; $('#tipsBtn',V).setAttribute('aria-expanded',String(!b.hidden)); };
   $('#onionChk',V).onchange=showFrame; $('#onionBtn',V).onclick=()=>{ const c=$('#onionChk',V); c.checked=!c.checked; $('#onionBtn',V).setAttribute('aria-pressed',String(c.checked)); showFrame(); };
   $('#phaseSel',V).onchange=e=>{cur().phase=e.target.value;save();showFrame();};
   $('#dupBtn',V).onclick=()=>{ const f=cur(); const nf={objects:f.objects.map(o=>({...o,id:OBJ_ID++})),ink:f.ink,bg:f.bg,phase:f.phase,el:{...f.el}}; ST.frames.splice(ST.cur+1,0,nf); ST.cur++; save(); showFrame(); toast('Duplicated. Now nudge something a little.'); };
