@@ -295,9 +295,9 @@ summary{cursor:pointer;font-weight:800;color:var(--navy)}
 .fillin.ok{color:var(--good);border-color:var(--good)} .fillin.no{color:var(--bad);border-color:var(--bad)}
 .framesout,.framesbank{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0;min-height:60px}
 .framesout{border:2px dashed var(--line);border-radius:12px;padding:8px}
-.snap{position:relative;border:3px solid var(--line);border-radius:10px;padding:0;background:#fff;overflow:hidden;width:120px;cursor:pointer}
+.snap{position:relative;border:3px solid var(--line);border-radius:10px;padding:0;background:#fff;overflow:hidden;width:200px;max-width:100%;cursor:pointer}
 .snap img{display:block;width:100%;height:auto} .snap.used{opacity:.25;pointer-events:none}
-.snap .n{position:absolute;left:4px;top:4px;background:var(--navy);color:#fff;border-radius:999px;font-size:.75rem;font-weight:900;padding:0 7px}
+.snap .n{position:absolute;left:6px;top:6px;background:var(--navy);color:#fff;border-radius:999px;font-size:1rem;font-weight:900;padding:1px 10px;box-shadow:0 0 0 2px #fff}
 .snap.right{border-color:var(--good)} .snap.wrong{border-color:var(--bad)}
 .q .opt .k{min-width:1.2em}
 /* motion pass */
@@ -824,8 +824,8 @@ const QX={
    const chk=()=>{ if(d.dataset.done) return; const ins=$$('.fillin',d); if(ins.some(i=>!i.value.trim())){ toast('Fill in every blank first.'); return; } d.dataset.done=1; let ok=true; ins.forEach((inp,i)=>{ const accept=[q.answers[i],...((q.alts&&q.alts[i])||[])].map(norm); const good=accept.includes(norm(inp.value)); inp.classList.add(good?'ok':'no'); inp.disabled=true; if(!good) ok=false; }); finish(ok, ok?esc(q.why||''):`Answer: ${q.answers.map(esc).join(', ')}. ${esc(q.why||'')}`); };
    $('#fChk',d).onclick=chk; $$('.fillin',d).forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')chk();})); $('.fillin',d).focus(); },
  frames(q,d,finish){ const order=shuffle(q.ts.map((t,i)=>i)); let out=[];
-   d.insertAdjacentHTML('beforeend',`<div class="small muted">Tap the snapshots in the order they happen during the cell cycle. Tap a chosen one to put it back.</div><div class="framesout" id="fo"></div><div class="framesbank" id="fb">${order.map(i=>`<button class="snap" data-i="${i}"><img src="${sceneDataURL('cell',q.ts[i],240,160)}" alt="snapshot"></button>`).join('')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="frChk" disabled>Check order</button></div>`);
-   const fo=$('#fo',d), fb=$('#fb',d); const redraw=()=>{ fo.innerHTML=out.map((i,k)=>`<button class="snap" data-i="${i}"><span class="n">${k+1}</span><img src="${sceneDataURL('cell',q.ts[i],240,160)}" alt="snapshot"></button>`).join(''); $$('.snap',fb).forEach(b=>b.classList.toggle('used',out.includes(+b.dataset.i))); $('#frChk',d).disabled=out.length!==q.ts.length; $$('.snap',fo).forEach(b=>b.onclick=()=>{ if(d.dataset.done) return; out=out.filter(i=>i!==+b.dataset.i); redraw(); }); };
+   d.insertAdjacentHTML('beforeend',`<div class="small muted">Tap the snapshots in the order they happen during the cell cycle. Tap a chosen one to put it back.</div><div class="framesout" id="fo"></div><div class="framesbank" id="fb">${order.map(i=>`<button class="snap" data-i="${i}"><img src="${sceneDataURL('cell',q.ts[i],360,240)}" alt="snapshot"></button>`).join('')}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="frChk" disabled>Check order</button></div>`);
+   const fo=$('#fo',d), fb=$('#fb',d); const redraw=()=>{ fo.innerHTML=out.map((i,k)=>`<button class="snap" data-i="${i}"><span class="n">${k+1}</span><img src="${sceneDataURL('cell',q.ts[i],360,240)}" alt="snapshot"></button>`).join(''); $$('.snap',fb).forEach(b=>b.classList.toggle('used',out.includes(+b.dataset.i))); $('#frChk',d).disabled=out.length!==q.ts.length; $$('.snap',fo).forEach(b=>b.onclick=()=>{ if(d.dataset.done) return; out=out.filter(i=>i!==+b.dataset.i); redraw(); }); };
    $$('.snap',fb).forEach(b=>b.onclick=()=>{ if(d.dataset.done||b.classList.contains('used')) return; out.push(+b.dataset.i); redraw(); }); redraw();
    $('#frChk',d).onclick=()=>{ if(d.dataset.done) return; d.dataset.done=1; const ok=out.every((i,k)=>q.ts[i]<=q.ts[out[k+1]??i]&&i===[...q.ts.keys()].sort((a,b)=>q.ts[a]-q.ts[b])[k]); $$('.snap',fo).forEach((b,k)=>b.classList.add(ok||[...q.ts.keys()].sort((a,b)=>q.ts[a]-q.ts[b])[k]===+b.dataset.i?'right':'wrong')); finish(ok, ok?esc(q.why||''):`Order: ${q.names?q.names.join(' → '):'interphase → prophase → metaphase → anaphase → telophase → cytokinesis'}. ${esc(q.why||'')}`); }; }
 };
