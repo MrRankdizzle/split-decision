@@ -289,6 +289,8 @@ summary{cursor:pointer;font-weight:800;color:var(--navy)}
 .lscene.hot{cursor:crosshair}
 .lscene .dot{position:absolute;width:26px;height:26px;border-radius:50%;transform:translate(-50%,-50%);border:3px solid #fff;box-shadow:0 0 0 2px var(--navy)}
 .lscene .dot.right{background:var(--good)} .lscene .dot.wrong{background:var(--bad)}
+.lscene .zone{position:absolute;border-radius:50%;background:rgba(46,158,91,.16);border:2px dashed var(--good);pointer-events:none;box-sizing:border-box}
+.lscene .zone.rect{border-radius:8px}
 .fillin{font:inherit;font-weight:800;color:var(--carolina);border:0;border-bottom:3px dashed var(--carolina);background:transparent;width:9em;text-align:center;padding:.1em .3em}
 .fillin.ok{color:var(--good);border-color:var(--good)} .fillin.no{color:var(--bad);border-color:var(--bad)}
 .framesout,.framesbank{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0;min-height:60px}
@@ -782,7 +784,7 @@ function proveResult(host,levelN,result,extra){ const o=overall(S); host.innerHT
 /* ===================== EXTRA QUESTION TYPES ===================== */
 /* label: {stem, scene:'cell'|'cycle'|'cube'|'photo', t (for cell scene), src (image path for photo scene), targets:[{id,x,y,answer}], choices:[...]}  -> drag words onto numbered pins (x,y are fractions of the image)
    sort:  {stem, bins:['A','B'], items:[[text,binIndex],...]}                                              -> drag cards into bins
-   hotspot:{stem, scene, t, answer:{x,y,r}} (fractions of canvas)                                           -> click the right place
+   hotspot:{stem, scene, t, answer:[{x,y,r} | {x1,y1,x2,y2}, ...]} (fractions of the picture; a click inside any region counts) -> click the right place
    fill:  {stem, text:'The ___ holds DNA', answers:['nucleus'], alts:[['nuclei']]}                           -> type the word(s)
    frames:{stem, ts:[...phase times], answerOrder:[...]}                                                   -> drag mitosis snapshots into order
 */
@@ -809,9 +811,13 @@ const QX={
    $$('.bin',d).forEach(bn=>{ const i=+bn.dataset.b; const put=k=>{ where[k]=i; picked=null; $$('.tok',bank).forEach(x=>x.classList.remove('sel')); redraw(); }; bn.onclick=e=>{ if(d.dataset.done||e.target.classList.contains('inbin')) return; if(picked!==null) put(picked); }; bn.ondragover=e=>e.preventDefault(); bn.ondrop=e=>{ e.preventDefault(); if(d.dataset.done) return; put(e.dataTransfer.getData('text/plain')); }; });
    $('#sChk2',d).onclick=()=>{ if(d.dataset.done) return; d.dataset.done=1; let ok=true; $$('.inbin',d).forEach(b=>{ const good=q.items[b.dataset.k][1]===where[b.dataset.k]; b.classList.add(good?'right':'wrong'); if(!good) ok=false; }); finish(ok, ok?esc(q.why||''):`Correct bins: ${q.bins.map((b,i)=>`<b>${esc(b)}</b>: ${q.items.filter(it=>it[1]===i).map(it=>esc(it[0])).join(', ')}`).join(' · ')}. ${esc(q.why||'')}`); };
    redraw(); },
- hotspot(q,d,finish){ const img=sceneDataURL(q.scene,q.t,480,320);
+ hotspot(q,d,finish){ const img=sceneDataURL(q.scene,q.t,480,320,q.src); const regions=Array.isArray(q.answer)?q.answer:[q.answer];
    d.insertAdjacentHTML('beforeend',`<div class="lscene hot" style="background-image:url(${img})"><div class="dot" hidden></div></div><div class="small muted">Click (or tap) the spot on the picture.</div>`);
-   const sc=$('.lscene',d); sc.onclick=e=>{ if(d.dataset.done) return; d.dataset.done=1; const r=sc.getBoundingClientRect(); const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height; const dot=$('.dot',sc); dot.hidden=false; dot.style.left=fx*100+'%'; dot.style.top=fy*100+'%'; const ok=Math.hypot(fx-q.answer.x,fy-q.answer.y)<=q.answer.r; dot.classList.add(ok?'right':'wrong'); if(!ok){ const t=document.createElement('div'); t.className='dot right'; t.style.left=q.answer.x*100+'%'; t.style.top=q.answer.y*100+'%'; sc.appendChild(t); } finish(ok,esc(q.why||'')); }; },
+   const inside=(r,fx,fy)=>r.r!=null?Math.hypot(fx-r.x,fy-r.y)<=r.r:fx>=r.x1&&fx<=r.x2&&fy>=r.y1&&fy<=r.y2;
+   const sc=$('.lscene',d); sc.onclick=e=>{ if(d.dataset.done) return; d.dataset.done=1; const b=sc.getBoundingClientRect(); const fx=(e.clientX-b.left)/b.width, fy=(e.clientY-b.top)/b.height; const dot=$('.dot',sc); dot.hidden=false; dot.style.left=fx*100+'%'; dot.style.top=fy*100+'%'; const ok=regions.some(r=>inside(r,fx,fy)); dot.classList.add(ok?'right':'wrong');
+     // show every acceptable region softly once the student has answered
+     regions.forEach(r=>{ const z=document.createElement('div'); z.className='zone'+(r.r!=null?'':' rect'); const [l,t,w,h]=r.r!=null?[r.x-r.r,r.y-r.r,r.r*2,r.r*2]:[r.x1,r.y1,r.x2-r.x1,r.y2-r.y1]; z.style.cssText=`left:${l*100}%;top:${t*100}%;width:${w*100}%;height:${h*100}%`; sc.insertBefore(z,dot); });
+     finish(ok,esc(q.why||'')); }; },
  fill(q,d,finish){ const parts=q.text.split('___'); let html=''; parts.forEach((p,i)=>{ html+=esc(p); if(i<parts.length-1) html+=`<input type="text" class="fillin" data-i="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="blank ${i+1}">`; });
    d.insertAdjacentHTML('beforeend',`<div class="fillq big">${html}</div><div class="row" style="margin-top:8px"><button class="btn sm" id="fChk">Check</button></div>`);
    const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
@@ -1085,9 +1091,9 @@ const L1_BANK=[
  {type:'label',stem:'Label this metaphase cell.',scene:'cell',t:2.95,targets:[{x:0.5,y:0.5,answer:'Chromosomes'},{x:0.255,y:0.5,answer:'Centrosome'},{x:0.42,y:0.3,answer:'Spindle fiber'},{x:0.5,y:0.08,answer:'Cell membrane'}],choices:['Chromosomes','Centrosome','Spindle fiber','Cell membrane','Nuclear envelope','Chromatin'],why:'In metaphase there is no nuclear envelope and no loose chromatin; those two labels were decoys.'},
  {type:'label',stem:'Label this interphase cell.',scene:'cell',t:0.3,targets:[{x:0.5,y:0.5,answer:'Chromatin'},{x:0.5,y:0.3,answer:'Nuclear envelope'},{x:0.56,y:0.2,answer:'Centrosome'}],choices:['Chromatin','Nuclear envelope','Centrosome','Chromosome','Spindle fiber'],why:'In interphase the DNA is loose chromatin inside an intact nucleus. Spindle fibers and X-shaped chromosomes appear later.'},
  {type:'label',stem:'Label this anaphase cell.',scene:'cell',t:3.7,targets:[{x:0.36,y:0.5,answer:'Chromatid'},{x:0.745,y:0.5,answer:'Centrosome'},{x:0.5,y:0.92,answer:'Cell membrane'}],choices:['Chromatid','Centrosome','Cell membrane','Nuclear envelope','Cleavage furrow'],why:'In anaphase there is no nuclear envelope yet and no furrow yet.'},
- {type:'hotspot',stem:'Click where the metaphase plate is in this cell.',scene:'cell',t:2.9,answer:{x:0.5,y:0.5,r:0.1},hint:'The metaphase plate is the imaginary line down the middle where the chromosomes line up.',why:'The metaphase plate runs down the middle of the cell, halfway between the two poles.'},
- {type:'hotspot',stem:'Click a centrosome in this prophase cell.',scene:'cell',t:1.95,answer:{x:0.255,y:0.5,r:0.09},hint:'Centrosomes head for the poles, the far left and right ends of the cell.',why:'By late prophase the centrosomes have reached the poles and the spindle is growing from them.'},
- {type:'hotspot',stem:'Click the cleavage furrow.',scene:'cell',t:5.3,answer:{x:0.5,y:0.5,r:0.1},hint:'The furrow is where the membrane pinches inward.',why:'The cleavage furrow is the pinch in the middle of the dividing cell.'},
+ {type:'hotspot',stem:'Click where the metaphase plate is in this cell.',scene:'cell',t:2.9,answer:[{x1:0.44,y1:0.12,x2:0.56,y2:0.88}],hint:'The metaphase plate is the imaginary line down the middle where the chromosomes line up.',why:'The metaphase plate runs down the middle of the cell, halfway between the two poles.'},
+ {type:'hotspot',stem:'Click a centrosome in this prophase cell.',scene:'cell',t:1.95,answer:[{x:0.255,y:0.5,r:0.09},{x:0.745,y:0.5,r:0.09}],hint:'Centrosomes head for the poles, the far left and right ends of the cell.',why:'By late prophase the centrosomes have reached the poles and the spindle is growing from them.'},
+ {type:'hotspot',stem:'Click the cleavage furrow.',scene:'cell',t:5.3,answer:[{x1:0.44,y1:0.12,x2:0.56,y2:0.88}],hint:'The furrow is where the membrane pinches inward.',why:'The cleavage furrow is the pinch in the middle of the dividing cell.'},
  {type:'sort',stem:'Sort these events: do they happen in interphase or in mitosis?',bins:['Interphase','Mitosis'],items:[['DNA is copied',0],['cell grows and makes proteins',0],['chromosomes line up in the middle',1],['sister chromatids pulled apart',1],['centrosome duplicates',0],['nuclear envelope breaks down',1]],why:'Interphase is preparation; mitosis is the actual division of the nucleus.'},
  {type:'sort',stem:'Which jobs does mitosis handle, and which does it not?',bins:['Mitosis does this','Mitosis does not do this'],items:[['healing a scraped knee',0],['growing taller',0],['making egg cells',1],['replacing the gut lining',0],['halving the chromosome number',1],['a starfish regrowing an arm',0]],why:'Growth, repair, replacement, and asexual reproduction are mitosis. Sex cells and halving chromosomes are meiosis.'},
  {type:'mc',stem:'A plant cell finishes dividing by building a ___ instead of pinching.',opts:['cell plate','cell wall','cleavage furrow','spindle plate'],ans:0,why:'A rigid cell wall cannot pinch, so plant cells build a new wall (cell plate) down the middle.'},
