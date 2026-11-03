@@ -286,6 +286,11 @@ summary{cursor:pointer;font-weight:800;color:var(--navy)}
 .lscene{position:relative;width:100%;max-width:480px;aspect-ratio:3/2;background-size:cover;background-position:center;border-radius:12px;border:2px solid var(--line);margin:6px 0}
 .lscene .pin{position:absolute;transform:translate(-50%,-50%);cursor:pointer}
 .lscene.photo-scene{max-width:760px;background-size:100% 100%}
+/* on a photo the badge sits off the cell on a short leader so it never hides the DNA; the gold dot marks the exact cell */
+.lscene.photo-scene .pin{width:0;height:0;transform:none}
+.lscene.photo-scene .pin::before{content:"";position:absolute;left:-1px;top:0;width:2px;height:34px;background:#fff;box-shadow:0 0 0 1px rgba(21,52,90,.6);transform-origin:top center;transform:rotate(-140deg)}
+.lscene.photo-scene .pin .pt{position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(21,52,90,.6)}
+.lscene.photo-scene .pin .pn{position:absolute;left:12px;top:-40px}
 .lscene .pin.hl .pn{transform:scale(1.3);background:var(--gold);color:#3a2a00}
 .lscene .pin.right .pn{background:var(--good)} .lscene .pin.wrong .pn{background:var(--bad)}
 .lslots{display:grid;gap:6px;margin:6px 0}
@@ -811,7 +816,7 @@ function sceneDataURL(scene,t,w,h,src){ if(scene==='photo') return src||t; retur
 
 const QX={
  label(q,d,finish){ const img=sceneDataURL(q.scene,q.t,480,320,q.src); const choices=shuffle(q.choices||q.targets.map(t=>t.answer)); let placed={}; 
-   d.insertAdjacentHTML('beforeend',`<div class="labelq"><div class="lscene ${q.scene==='photo'?'photo-scene':''}" style="background-image:url(${img})">${q.targets.map((t,i)=>`<div class="pin" style="left:${t.x*100}%;top:${t.y*100}%" data-i="${i}"><span class="pn">${i+1}</span></div>`).join('')}</div><div class="lbank" id="lbank">${choices.map(c=>`<button class="tok" draggable="true" data-w="${esc(c)}">${esc(c)}</button>`).join('')}</div><div class="lslots">${q.targets.map((t,i)=>`<div class="lrow" data-i="${i}"><span class="pn">${i+1}</span><span class="slot" data-i="${i}">drop a label here</span></div>`).join('')}</div><div class="small muted">Drag a label onto a numbered slot (or tap a label, then tap the slot). Tap a placed label to return it. Some labels are decoys.</div><div class="row" style="margin-top:8px"><button class="btn sm" id="lChk" disabled>Check labels</button></div></div>`);
+   d.insertAdjacentHTML('beforeend',`<div class="labelq"><div class="lscene ${q.scene==='photo'?'photo-scene':''}" style="background-image:url(${img})">${q.targets.map((t,i)=>`<div class="pin" style="left:${t.x*100}%;top:${t.y*100}%" data-i="${i}">${q.scene==='photo'?'<i class="pt"></i>':''}<span class="pn">${i+1}</span></div>`).join('')}</div><div class="lbank" id="lbank">${choices.map(c=>`<button class="tok" draggable="true" data-w="${esc(c)}">${esc(c)}</button>`).join('')}</div><div class="lslots">${q.targets.map((t,i)=>`<div class="lrow" data-i="${i}"><span class="pn">${i+1}</span><span class="slot" data-i="${i}">drop a label here</span></div>`).join('')}</div><div class="small muted">Drag a label onto a numbered slot (or tap a label, then tap the slot). Tap a placed label to return it. Some labels are decoys.</div><div class="row" style="margin-top:8px"><button class="btn sm" id="lChk" disabled>Check labels</button></div></div>`);
    let picked=null; const bank=$('#lbank',d);
    const redraw=()=>{ $$('.slot',d).forEach(s=>{ const i=+s.dataset.i; s.textContent=placed[i]||'drop a label here'; s.classList.toggle('filled',!!placed[i]); }); $$('.tok',bank).forEach(b=>b.classList.toggle('used',Object.values(placed).includes(b.dataset.w))); $('#lChk',d).disabled=Object.keys(placed).length!==q.targets.length; };
    const put=(i,w)=>{ for(const k in placed) if(placed[k]===w) delete placed[k]; placed[i]=w; picked=null; $$('.tok',bank).forEach(b=>b.classList.remove('sel')); redraw(); };
