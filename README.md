@@ -16,7 +16,7 @@ Static site: `index.html` plus the `img/` folder. No build step.
 - `index.html` is the whole app (styles, scripts, question banks, drawings).
 - `img/` holds the photos and micrographs. If an image is missing, the app falls back to its drawn version.
 - `img/icon.svg`, `img/favicon.png` and `img/apple-touch-icon.png` are the app icon (one cell pinching into two, in school colors).
-- Optional question photos: drop `img/lizard-tail-regrowth.jpg` and `img/intestinal-lining.jpg` (about 1200 x 800) into `img/` and the matching questions pick them up automatically. Until then those questions simply show no picture.
+- Optional photos: `img/hydra-budding.jpg`, `img/starfish-regrowing-arm.jpg` and `img/animal-cell-cleavage.jpg` (about 1200 x 800). Drop them into `img/` and the matching questions and the Cytokinesis lesson pick them up automatically; until then no picture is shown there.
 - `vercel.json` sets long caching for images.
 
 ## Editing
