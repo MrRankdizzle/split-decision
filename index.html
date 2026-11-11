@@ -10,9 +10,12 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} img{max-width:100%} [hidden]{display:none!important}</style>
 <title>Split Decision</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<script>/* apply saved display settings before the page paints */
+(function(){try{var v=JSON.parse(localStorage.getItem('splitDecision.settings')||'{}'),d=document.documentElement;if(v.theme==='light'||v.theme==='dark')d.dataset.theme=v.theme;if(v.text&&v.text!=='normal')d.dataset.text=v.text;['hc','dys','tts'].forEach(function(k){if(v[k]==='on')d.classList.add(k)});if(v.cvd==='cb')d.classList.add('cb');if(v.motion==='reduce')d.classList.add('rm')}catch(e){}})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&family=Lexend:wght@400;600;700;800&display=swap">
 <style>
-/* Layout: sticky top bar + left level rail (stacks on phones) + one working panel. Classroom app, Little Chute Mustangs identity. */
+/* Layout: sticky top bar that holds the Level 1/2/3 switcher and the Menu button, then one full-width working panel (tabs + view).
+   Settings live in the Menu drawer and are applied as classes on <html>: rm (calm motion), cb, dys, hc, tts. Never read prefers-reduced-motion. */
 :root{
   --carolina:#4B9CD3; --sky:#87CEEB; --navy:#15345A; --ink:#1b2a3d; --ink2:#4a5b70;
   --bg:#f3f8fc; --paper:#ffffff; --paper2:#e9f3fa; --line:#c9dcea;
@@ -31,7 +34,7 @@
   --cyto:#1d3a52; --mem:#8fc9ef; --shadow:0 6px 24px rgba(0,0,0,.35); color-scheme:dark }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;letter-spacing:.005em}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;letter-spacing:.005em}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:#15345A}
 h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.15;margin:0 0 .4em;text-wrap:balance;color:var(--navy);letter-spacing:-.01em}
 h1{font-size:2rem} h2{font-size:1.45rem} h3{font-size:1.15rem} h4{font-size:1rem}
@@ -50,19 +53,19 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
 .chip.l1{background:#fde68a;color:#5a3d00}.chip.l2{background:#bfe3fb;color:#0d3a5c}.chip.l3{background:#c9f0d6;color:#0d4a26}
 .chip.ne{background:#e6e8ec;color:#444}
 /* top bar */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:#15345A;color:#fff;display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.top .logo{width:46px;height:46px;flex:none;border-radius:11px;box-shadow:0 0 0 2px rgba(255,255,255,.22)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:#15345A;color:#fff;display:flex;align-items:center;gap:12px;padding-block:7px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top .logo{width:40px;height:40px;flex:none;border-radius:10px;box-shadow:0 0 0 2px rgba(255,255,255,.22)}
 .top .lc-mini{height:34px;width:auto;background:#fff;border-radius:8px;padding:3px 5px;margin-left:6px}
 @media (max-width:760px){.top .lc-mini{display:none}}
 .app-ico{display:inline-block;flex:none}.app-ico svg{display:block;width:100%;height:100%}
-.top .brand{font-family:var(--display);font-weight:700;font-size:1.25rem;line-height:1.1}
+.top .brand{font-family:var(--display);font-weight:700;font-size:1.12rem;line-height:1.1;white-space:nowrap}
 .top .brand small{display:block;font-family:var(--body);font-weight:600;font-size:.72rem;opacity:.8;letter-spacing:.06em;text-transform:uppercase}
 .top .spacer{flex:1}
-.top .who{font-size:.9rem;opacity:.95;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.top .who{font-size:.9rem;opacity:.95;display:flex;align-items:center;gap:10px;flex:none;justify-content:flex-end;white-space:nowrap}
 .top .who button{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.3em .8em;font-weight:700}
 /* frame */
-.frame{display:grid;grid-template-columns:230px 1fr;gap:18px;padding-block:18px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1380px;margin:0 auto}
-@media (max-width:860px){.frame{grid-template-columns:1fr}}
+.frame{display:block;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1560px;margin:0 auto}
+
 .rail{display:flex;flex-direction:column;gap:8px;min-width:0}
 .rail .lvl{border:0;text-align:left;background:var(--paper);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow);color:var(--ink);border-left:6px solid var(--line)}
 .rail .lvl.on{border-left-color:var(--carolina);outline:2px solid var(--carolina)}
@@ -130,7 +133,7 @@ input[type=range]{width:100%;accent-color:var(--carolina)}
 /* mitosis viewer */
 .viewer{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
 @media (max-width:980px){.viewer{grid-template-columns:1fr}}
-canvas.cell{width:100%;max-width:100%;height:auto;background:var(--paper2);border-radius:12px;display:block}
+canvas.cell{width:min(100%,max(320px,calc((100vh - 300px)*800/520)));margin-inline:auto;max-width:100%;height:auto;background:var(--paper2);border-radius:12px;display:block}
 .phasebar{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
 .phasebar button{flex:1;min-width:84px;border:2px solid var(--line);border-radius:8px;padding:.35em .3em;background:var(--paper);font-weight:800;font-size:.8rem;color:var(--navy)}
 .phasebar button.on{background:var(--carolina);border-color:var(--carolina);color:#fff}
@@ -138,15 +141,21 @@ canvas.cell{width:100%;max-width:100%;height:auto;background:var(--paper2);borde
 .legend span{display:flex;align-items:center;gap:8px}
 .legend i{width:16px;height:16px;border-radius:4px;display:inline-block;flex:none}
 /* studio */
-.studio{display:grid;grid-template-columns:190px minmax(0,1fr) 250px;gap:12px}
-@media (max-width:1100px){.studio{grid-template-columns:1fr}.tools{flex-direction:row;flex-wrap:wrap}.stamps{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}}
+.studio{display:grid;grid-template-columns:200px minmax(0,1fr) 250px;gap:14px}
+
 .tools{display:flex;flex-direction:column;gap:6px}
 .tools button,.stamps button{border:2px solid var(--line);background:var(--paper);border-radius:9px;padding:.4em .6em;font-weight:700;color:var(--navy);text-align:left;font-size:.85rem;display:flex;align-items:center;gap:.4em;min-width:0;line-height:1.2}
 .tools button.on,.stamps button.on{background:var(--carolina);color:#fff;border-color:var(--carolina)}
 .stamps{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media (max-width:980px){.studio{grid-template-columns:1fr}.stamps{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}}
 .stamps button{flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:5px 3px;font-size:.7rem;line-height:1.15;gap:.25em}
 .stamps canvas{width:64px;height:46px;background:#fff;border-radius:6px}
-.stage{max-height:max(320px,45vh);margin:0 auto}
+.stagewrap{display:flex;gap:10px;justify-content:center;align-items:flex-start}
+.stage{flex:0 1 max(400px,calc((100vh - 262px)*4/3));min-width:0}
+.vtools{flex:none;flex-direction:column;align-items:stretch;margin-top:0;gap:5px}
+.vtools .sep{display:none}.vtools button{justify-content:flex-start}
+.studio-card{padding:14px 16px}
+@media (max-width:980px){.stagewrap{flex-direction:column;align-items:stretch}.stage{flex:none;width:100%}.vtools{order:2;flex-direction:row;flex-wrap:wrap}}
 
 .tips{margin:0 0 10px;padding:6px 14px}
 .tips summary{display:flex;align-items:center;gap:.4em;font-size:.95rem}
@@ -192,7 +201,7 @@ canvas.cell{width:100%;max-width:100%;height:auto;background:var(--paper2);borde
 .cube.still{animation:none;transform:rotateX(-24deg) rotateY(35deg)}
 .cube i{position:absolute;inset:0;background:rgba(75,156,211,.35);border:2px solid var(--carolina);display:grid;place-items:center;font-family:var(--mono);font-weight:700;color:var(--navy);font-size:.8rem}
 @keyframes spin{from{transform:rotateX(-24deg) rotateY(0)}to{transform:rotateX(-24deg) rotateY(360deg)}}
-@media (prefers-reduced-motion:reduce){.cube{animation:none;transform:rotateX(-24deg) rotateY(35deg)}}
+
 .rm .cube{animation:none;transform:rotateX(-24deg) rotateY(35deg)}
 .cubes{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;justify-content:center}
 /* ratio builder */
@@ -289,10 +298,6 @@ summary{cursor:pointer;font-weight:800;color:var(--navy)}
 .hintbtn[disabled]{opacity:.5}
 .hintbox{background:rgba(242,183,5,.16);border-radius:10px;padding:8px 12px;margin-top:8px;font-weight:600}
 /* accommodations */
-.a-big{font-size:19px}
-.a-space{letter-spacing:.04em;word-spacing:.12em;line-height:1.9}
-.a-space p,.a-space .stem,.a-space .opt{line-height:1.9}
-.a-hc{--bg:#ffffff;--paper:#ffffff;--paper2:#eef2f6;--line:#0b2a4a;--ink:#000;--ink2:#1b2a3d;--navy:#000;--carolina:#0b4f8a}
 .readbtn{border:2px solid var(--line);background:var(--paper);color:var(--navy);border-radius:999px;padding:.25em .7em;font-size:.85rem;font-weight:800;display:inline-flex;align-items:center;gap:.35em}
 /* landing character */
 #bgPlate{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.42}
@@ -452,14 +457,124 @@ input[type=number].ans{max-width:100%}
 .tbl-wrap{max-width:100%}
 body.has-calc .frame{padding-bottom:96px}
 .calc-fab{padding:.55em .9em;font-size:.9rem}
+
+/* ===================== LEVEL SWITCHER (top bar) ===================== */
+.lvlnav{display:flex;gap:6px;margin-left:10px;min-width:0}
+.lvlnav .lv{display:flex;align-items:center;gap:8px;border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:3px 14px 3px 4px;font-weight:800;min-width:0;text-align:left;line-height:1.1;transition:background .15s}
+.lvlnav .lv:hover{background:rgba(255,255,255,.18)}
+.lvlnav .lv.on{background:#fff;color:#15345A;border-color:#fff}
+.lvlnav .ring{--p:0;flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#f2b705 calc(var(--p)*1%),rgba(255,255,255,.28) 0);position:relative}
+.lvlnav .lv.on .ring{background:conic-gradient(#f2b705 calc(var(--p)*1%),#c9dcea 0)}
+.lvlnav .ring b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#15345A;color:#fff;font-family:var(--display);font-size:.85rem}
+.lvlnav .ring .dn{position:absolute;right:-5px;bottom:-4px;width:15px;height:15px;border-radius:50%;background:#2e9e5b;color:#fff;display:grid;place-items:center;box-shadow:0 0 0 2px #15345A}
+.lvlnav .ring .dn svg{width:10px;height:10px;stroke-width:3.5}
+.lvlnav .lv.on .ring .dn{box-shadow:0 0 0 2px #fff}
+.lvlnav .lt{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.92rem}
+.lvlnav .lt small{display:block;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.tabsrow{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin-bottom:12px}
+.tabsrow .tabs{margin-bottom:0}
+.lvstat{margin-left:auto;font-size:.82rem;color:var(--ink2);font-weight:700;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center}
+.lvstat b{color:var(--navy)}
+.lvstat .pbar{display:inline-block;width:70px;height:7px;border-radius:4px;background:var(--paper2);overflow:hidden;vertical-align:middle;margin-left:6px;box-shadow:inset 0 0 0 1px var(--line)}
+.lvstat .pbar i{display:block;height:100%;background:var(--carolina)}
+@media (max-width:1180px){.top .brand small{display:none}.top .lc-mini{display:none}}
+@media (max-width:1020px){.top .brand{display:none}.top .who>span{display:none}}
+@media (max-width:900px){.top{flex-wrap:wrap}.lvlnav{order:9;width:100%;margin-left:0}.lvlnav .lv{flex:1;padding-right:8px}.top .brand{display:block}}
+@media (max-width:760px){.lvstat{display:none}}
+@media (max-width:560px){.lvlnav .lt{font-size:.76rem;white-space:normal}.lvlnav .lt small{display:none}.lvlnav .ring{width:28px;height:28px}.lvlnav .ring b{width:21px;height:21px}.top #reportBtn{display:none}}
+/* ===================== MENU BUTTON + DRAWER ===================== */
+.menu-btn{display:inline-flex;align-items:center;gap:.45em;border:0;border-radius:999px;padding:.5em 1em;background:#15345A;color:#fff;font-weight:800;font-size:.95rem}
+.menu-btn svg{width:20px;height:20px;stroke-width:2.6}
+.top .who .menu-btn{background:#fff;color:#15345A;border-color:#fff}
+@media (max-width:560px){.land-top .menu-btn span{display:none}.land-top .menu-btn{padding:.6em .7em}}
+.set-layer{position:fixed;inset:0;z-index:30}
+.set-scrim{position:absolute;inset:0;background:rgba(10,20,35,.55)}
+.set-drawer{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--paper);color:var(--ink);overflow-y:auto;padding:0 18px 28px;box-shadow:-10px 0 40px rgba(0,0,0,.3);animation:drawerIn .22s ease-out}
+@keyframes drawerIn{from{transform:translateX(40px);opacity:0}}
+.set-head{position:sticky;top:0;z-index:2;background:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 10px;border-bottom:2px solid var(--line);margin-bottom:6px}
+.set-head h2{margin:0;font-size:1.3rem;display:flex;align-items:center;gap:.4em}
+.set-sec{padding:12px 0;border-bottom:2px solid var(--line)}
+.set-sec h3{font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;color:var(--carolina);margin:0 0 8px}
+.hc .set-sec h3{color:var(--navy)}
+.set-row{border:0;padding:0;margin:0 0 12px;min-width:0}
+.set-row legend{font-weight:800;color:var(--navy);padding:0;margin-bottom:4px}
+.set-note{display:block;font-size:.85rem;color:var(--ink2);font-weight:500;margin:0 0 6px;line-height:1.4}
+.set-seg{display:flex;flex-wrap:wrap;gap:6px}
+.set-seg label{flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:.35em;text-align:center;border:2px solid var(--line);border-radius:10px;padding:.5em .7em;font-weight:800;color:var(--navy);background:var(--paper);cursor:pointer;position:relative}
+.set-seg label.on{background:#15345A;border-color:#15345A;color:#fff}
+.set-seg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.set-seg label:focus-within{outline:3px solid var(--gold);outline-offset:2px}
+.set-sw{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;border:2px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);padding:9px 12px;margin-bottom:8px}
+.set-sw b{display:block;color:var(--navy)}
+.set-sw .set-note{margin:2px 0 0}
+.sw-track{flex:none;width:46px;height:26px;border-radius:999px;background:var(--line);position:relative;transition:background .15s}
+.sw-track::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .15s}
+.set-sw[aria-checked="true"] .sw-track{background:#15345A}
+.set-sw[aria-checked="true"] .sw-track::after{transform:translateX(20px)}
+.set-sw[aria-checked="true"]{border-color:var(--carolina)}
+.set-acts{display:flex;flex-wrap:wrap;gap:8px}
+.set-preview{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.set-preview .q{margin:0;padding:0;border:0;background:none;box-shadow:none;animation:none}
+.set-preview .opt{pointer-events:none;padding:6px 14px!important}
+.set-foot{font-size:.85rem;color:var(--ink2);margin:12px 0 8px}
+/* ===================== TEXT SIZE · DYSLEXIA · HIGH CONTRAST ===================== */
+html[data-text="large"]{font-size:112.5%} html[data-text="xl"]{font-size:128%}
+.dys{--body:"Lexend","Atkinson Hyperlegible",system-ui,sans-serif;--display:"Lexend","Sora",system-ui,sans-serif}
+.dys body{letter-spacing:.03em;word-spacing:.12em;line-height:1.75}
+.dys :is(p,li,.stem,.opt,.callout,figcaption,.set-note){line-height:1.75;text-align:left}
+.dys *{font-style:normal!important}
+.dys :is(svg,canvas,.formula,input,.lvlnav,.mono){letter-spacing:normal;word-spacing:normal}
+:root.hc{--bg:#ffffff;--paper:#ffffff;--paper2:#eef2f6;--line:#0b2a4a;--ink:#000;--ink2:#1b2a3d;--navy:#000;--carolina:#0b4f8a}
+@media (prefers-color-scheme: dark){:root.hc:not([data-theme="light"]){--bg:#050d18;--paper:#0a1626;--paper2:#12233a;--line:#a9c8e4;--ink:#fff;--ink2:#e3eef8;--navy:#fff;--carolina:#8fd0ff}}
+:root.hc[data-theme="dark"]{--bg:#050d18;--paper:#0a1626;--paper2:#12233a;--line:#a9c8e4;--ink:#fff;--ink2:#e3eef8;--navy:#fff;--carolina:#8fd0ff}
+.hc .muted{color:var(--ink)!important}
+.hc :focus-visible{outline-width:4px!important}
+.hc :is(.q .opt,.tok,.card.soft,.callout){border:2px solid var(--line)}
+/* ===================== READ ALOUD · RULER · WORD HELP ===================== */
+html:not(.tts) .readbtn{display:none}
+.saypop{position:fixed;z-index:40;border:0;border-radius:999px;background:#15345A;color:#fff;font-weight:800;padding:.45em .9em;display:inline-flex;align-items:center;gap:.4em;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.ruler{position:fixed;left:0;right:0;top:-26px;height:52px;z-index:28;pointer-events:none;background:rgba(242,183,5,.2);border-block:2px solid rgba(242,183,5,.75);will-change:transform}
+.gw{border-bottom:2px dotted var(--carolina);cursor:help;border-radius:3px}
+.gw:hover,.gw:focus-visible{background:rgba(75,156,211,.2)}
+.gpop{position:absolute;z-index:35;width:min(320px,calc(100vw - 24px));background:var(--paper);color:var(--ink);border:2px solid var(--carolina);border-radius:14px;padding:12px 14px;box-shadow:0 12px 34px rgba(0,0,0,.28);font-size:.95rem;line-height:1.45}
+.gpop h4{margin:0 0 4px;font-size:1.05rem;text-transform:capitalize}
+.gpop p{margin:0 0 8px}
+.gpop .es{border-top:2px solid var(--line);padding-top:8px;margin-top:2px}
+.gpop .es b{color:var(--navy)}
+.gloss{display:grid;gap:0;border:2px solid var(--line);border-radius:12px;overflow:hidden;margin-top:8px}
+.gloss>div{display:grid;grid-template-columns:minmax(110px,170px) 1fr;gap:12px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.gloss>div:last-child{border-bottom:0}
+.gloss dt{font-weight:800;color:var(--navy);text-transform:capitalize}.gloss dd{margin:0}
+.gloss .es{display:block;color:var(--ink2);font-size:.9em;margin-top:2px}
+@media (max-width:520px){.gloss>div{grid-template-columns:1fr;gap:2px}}
+/* ===================== COLOR-BLIND FRIENDLY ===================== */
+/* right/wrong become blue/orange and every right/wrong state also carries a check or X, so color never carries meaning alone */
+:root{--cb-ok:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='8' fill='%230067A3'/%3E%3Cpath d='M4 8.5l2.7 2.7 5.3-6' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --cb-no:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='8' fill='%23C2410C'/%3E%3Cpath d='M5 5l6 6M11 5l-6 6' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")}
+:root.cb{--good:#0067A3;--bad:#C2410C}
+@media (prefers-color-scheme: dark){:root.cb:not([data-theme="light"]){--good:#56B4E9;--bad:#F59E52}}
+:root.cb[data-theme="dark"]{--good:#56B4E9;--bad:#F59E52}
+.cb :is(.q .opt.right,.tok.right,.q .fb.good,.pchip.ok,input.ok){background-color:rgba(0,103,163,.14)!important}
+.cb :is(.q .opt.wrong,.tok.wrong,.q .fb.bad,input.no){background-color:rgba(194,65,12,.14)!important}
+.cb :is(.q .opt,.tok):is(.right,.wrong){position:relative}
+.cb :is(.q .opt,.tok,.snap,.lscene .ltag):is(.right,.wrong)::after{content:"";position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;background:var(--cb-ok) center/100% no-repeat;box-shadow:0 0 0 2px var(--paper);z-index:2}
+.cb :is(.q .opt,.tok,.snap,.lscene .ltag).wrong::after{background-image:var(--cb-no)}
+.cb .snap{overflow:visible}
+.cb :is(input.ok,input.no,.fillin.ok,.fillin.no){background-image:var(--cb-ok);background-repeat:no-repeat;background-position:right 6px center;background-size:16px;padding-right:26px}
+.cb :is(input.no,.fillin.no){background-image:var(--cb-no)}
+.cb .lscene .ltag.right{color:#003d61}.cb .lscene .ltag.wrong{color:#7a2a08}
+.cb .dp-table tr.on .good{color:#003d61}.cb .dp-table tr.on .bad{color:#7a2a08}
+@media (max-width:560px){table.t{display:block;overflow-x:auto;max-width:100%}}
+select{max-width:100%}
+.kv>*{min-width:0}.kv select{width:100%}
+@media (max-width:560px){html[data-text] .kv,.dys .kv{grid-template-columns:1fr}}
 /* compact top bar on phones */
 @media (max-width:760px){
-  .top{gap:10px;flex-wrap:wrap}
+  .top{gap:10px}
   .top .brand{font-size:1.05rem}
   .top .brand small{display:none}
-  .top .spacer{display:none}
-  .top .who{width:100%;justify-content:flex-start;gap:6px}
   .top .who>span{display:none}
+  .top .who{gap:6px}
   .top .who button{padding:.3em .6em;font-size:.85rem}
 }
 @media (max-width:860px){
@@ -518,6 +633,7 @@ const ICONS={
  check:'<path d="M5 12l5 5L20 7"/>',
  x:'<path d="M6 6l12 12M18 6L6 18"/>',
  bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0012 3z"/>',
+ menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
  report:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
  save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
@@ -547,7 +663,7 @@ const MARTY=(sz=64)=>`<span class="face" style="display:inline-grid;place-items:
 
 <!-- LANDING -->
 <section id="landing" class="landing">
-  <div class="land-top"><span class="app-ico" id="heroIco" role="img" aria-label="Split Decision: one cell dividing into two"></span><div class="eyebrow" style="margin:0">Little Chute Mustangs · Biology · Essential Standard 3.2</div><span class="spacer"></span><img alt="Little Chute Mustangs" id="lcLogoHero" class="lc-badge"></div>
+  <div class="land-top"><span class="app-ico" id="heroIco" role="img" aria-label="Split Decision: one cell dividing into two"></span><div class="eyebrow" style="margin:0">Little Chute Mustangs · Biology · Essential Standard 3.2</div><span class="spacer"></span><img alt="Little Chute Mustangs" id="lcLogoHero" class="lc-badge"><button class="menu-btn" data-menu type="button" aria-label="Menu and settings"></button></div>
   <div class="hero">
     <div class="hero-copy">
       <h1 class="title-split"><span>Split</span> <span>Decision</span></h1>
@@ -578,13 +694,13 @@ const MARTY=(sz=64)=>`<span class="face" style="display:inline-grid;place-items:
 <div id="app" hidden>
   <header class="top">
     <span id="topLogo" class="logo app-ico" role="img" aria-label="Split Decision"></span>
-    <div class="brand">Split Decision<small>Mustang Biology · Standard 3.2 · Review Lab</small></div>
-    <img id="topLc" class="lc-mini" alt="Little Chute Mustangs">
+    <div class="brand">Split Decision<small>Standard 3.2 · Review Lab</small></div>
+    <nav class="lvlnav" id="lvlnav" aria-label="Proficiency levels"></nav>
     <div class="spacer"></div>
-    <div class="who"><span id="whoName"></span><button id="reportBtn"></button><button id="backupBtn"></button><button id="settingsBtn"></button><button id="switchBtn"></button></div>
+    <img id="topLc" class="lc-mini" alt="Little Chute Mustangs">
+    <div class="who"><span id="whoName"></span><button id="reportBtn"></button><button class="menu-btn" data-menu type="button" aria-label="Menu and settings"></button></div>
   </header>
   <div class="frame">
-    <nav class="rail" id="rail"></nav>
     <main class="panel" id="panel"></main>
   </div>
 </div>
@@ -660,7 +776,7 @@ class SavFig extends HTMLElement{
     this._ro.observe(this); this._io.observe(this); this._go(); }
   disconnectedCallback(){ cancelAnimationFrame(this._raf); this._raf=0; if(this._ro){ this._ro.disconnect(); this._io.disconnect(); } }
   _touch(){ if(!this._sway) return; this._sway=false; this.querySelector('.f3-hint').hidden=true; this.querySelector('.f3-reset').hidden=false; }
-  _rm(){ return document.body.classList.contains('rm'); }
+  _rm(){ return reducedMotion(); }
   set(spec){ this.spec=spec; this._y0=spec.yaw==null?-.62:spec.yaw; this._p0=spec.pitch==null?.42:spec.pitch; if(this._sway||this.yaw==null){ this.yaw=this._y0; this.pitch=this._p0; } if(spec.alt) this._c.setAttribute('aria-label',spec.alt+' Use the arrow keys to rotate.'); this.draw(); }
   _go(){ if(this._raf||!this._sway||this._rm()||!this._vis||!this.isConnected) return; let last=0; const tick=ts=>{ this._raf=0; if(!this.isConnected||!this._sway||this._rm()||!this._vis) return; this._t+=last?Math.min(.05,(ts-last)/1000):0; last=ts; this.yaw=this._y0+.36*Math.sin(this._t*.55); this.pitch=this._p0+.06*Math.sin(this._t*.4); this.draw(); this._raf=requestAnimationFrame(tick); }; this._raf=requestAnimationFrame(tick); }
   draw(){ const c=this._c, x=this._x, spec=this.spec; if(!c||!spec||!spec.objs) return; const W=Math.max(200,this.clientWidth||520), H=spec.h||250, dp=Math.min(2,window.devicePixelRatio||1);
@@ -737,7 +853,7 @@ function divideSVG(s){ const k=Math.min(6.5,66/s); const h=s/2; const ox=100,oy=
 function petriBackground(cv){ const x=cv.getContext('2d'); let W=0,H=0,rods=[],t=0,last=performance.now(),raf=null,full=0;
   const resize=()=>{ const dpr=Math.min(1.5,window.devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*dpr; cv.height=H*dpr; x.setTransform(dpr,0,0,dpr,0,0); };
   const seed=()=>{ rods=[]; for(let i=0;i<10;i++) rods.push({x:W*0.05+Math.random()*W*0.9,y:H*0.05+Math.random()*H*0.9,ang:Math.random()*Math.PI,len:12+Math.random()*16,vx:0,vy:0}); };
-  const reduced=()=>document.body.classList.contains('rm')||matchMedia('(prefers-reduced-motion: reduce)').matches&&!(window.S&&S.settings);
+  const reduced=()=>reducedMotion();
   const step=ts=>{ const dt=Math.min(0.05,(ts-last)/1000); last=ts; t+=dt; const CAP=Math.round(Math.min(420,W*H/4200));
     if(!reduced()){ const next=[]; rods.forEach(r=>{ r.len=Math.min(30,r.len+dt*7); r.x+=r.vx*dt+(Math.random()-.5)*0.3; r.y+=r.vy*dt+(Math.random()-.5)*0.3; r.vx*=0.97; r.vy*=0.97; if(r.x<-40) r.x=W+40; if(r.x>W+40) r.x=-40; if(r.y<-40) r.y=H+40; if(r.y>H+40) r.y=-40;
         if(r.len>=30&&rods.length<CAP&&Math.random()<0.6){ const dx=Math.cos(r.ang)*8, dy=Math.sin(r.ang)*8; next.push({x:r.x-dx,y:r.y-dy,ang:r.ang+(Math.random()-.5)*0.7,len:14,vx:-dx*2.5+(Math.random()-.5)*8,vy:-dy*2.5+(Math.random()-.5)*8}); next.push({x:r.x+dx,y:r.y+dy,ang:r.ang+(Math.random()-.5)*0.7,len:14,vx:dx*2.5+(Math.random()-.5)*8,vy:dy*2.5+(Math.random()-.5)*8}); } else next.push(r); }); rods=next;
@@ -759,16 +875,11 @@ const pick=(a,n)=>shuffle(a).slice(0,n);
 const fmt=(n,d=2)=>Number(n).toLocaleString('en-US',{maximumFractionDigits:d});
 
 const ACC_DEFS=[
- ['hints','Lab assistant hints','Marty can give a hint on any question (hints are counted on your portfolio artifact)',true],
- ['fewer','Fewer answer choices','Removes one wrong choice from multiple-choice questions',false],
- ['read','Read aloud','Adds a speaker button that reads lessons and questions out loud',false],
- ['big','Larger text','Increases text size across the app',false],
- ['space','Extra spacing','Wider letter spacing and line height for easier reading',false],
- ['hc','High contrast','Darker text and stronger borders',false],
- ['reduced','Reduce motion','Turns off spinning, bobbing, and auto-playing animations',false]
+ ['hints','Lab assistant hints','Marty can give a hint on any question. Hints are counted on your portfolio.',true],
+ ['fewer','Fewer answer choices','Removes one wrong choice from multiple-choice questions.',false]
 ];
 function blankState(name){return{
-  name, created:Date.now(), updated:Date.now(), settings:{burnLabels:true, hints:true, fewer:false, read:false, big:false, space:false, hc:false, reduced:false},
+  name, created:Date.now(), updated:Date.now(), settings:{burnLabels:true, hints:true, fewer:false},
   hints:{n:0, byLevel:{1:0,2:0,3:0}, prove:{1:0,2:0,3:0}},
   l1:{learn:{done:[]}, practice:{answered:0,correct:0}, studio:{frames:[],fps:4,cur:0}, prove:{best:null,attempts:[]}},
   l2:{learn:{done:[]}, practice:{answered:0,correct:0}, prove:{best:null,attempts:[]}},
@@ -803,10 +914,13 @@ function modal(html,{onOpen}={}){ const h=$('#modalHost'); h.innerHTML=`<div cla
 function closeModal(){$('#modalHost').innerHTML='';}
 function confirmBox(msg,yes){ modal(`<h3>${esc(msg)}</h3><div class="row" style="justify-content:flex-end"><button class="btn sec" id="mNo">Cancel</button><button class="btn bad" id="mYes">Yes, do it</button></div>`); $('#mNo').onclick=closeModal; $('#mYes').onclick=()=>{closeModal();yes();}; }
 /* confetti burst */
-function confetti(){ if(S&&S.settings.reduced) return; const c=$('#confetti'); c.hidden=false; c.width=innerWidth; c.height=innerHeight; const x=c.getContext('2d'); const ps=[...Array(90)].map(()=>({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight*0.4,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,c:['#4B9CD3','#87CEEB','#f2b705','#e11d48','#22c55e','#fff'][rnd(0,5)],r:Math.random()*6+3,a:Math.random()*6})); let f=0; const step=()=>{ x.clearRect(0,0,c.width,c.height); ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.45;p.a+=0.2; x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);x.restore();}); if(++f<70) requestAnimationFrame(step); else {x.clearRect(0,0,c.width,c.height); c.hidden=true;} }; step(); }
+function confetti(){ if(reducedMotion()) return; const c=$('#confetti'); c.hidden=false; c.width=innerWidth; c.height=innerHeight; const x=c.getContext('2d'); const ps=[...Array(90)].map(()=>({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight*0.4,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,c:['#4B9CD3','#87CEEB','#f2b705','#e11d48','#22c55e','#fff'][rnd(0,5)],r:Math.random()*6+3,a:Math.random()*6})); let f=0; const step=()=>{ x.clearRect(0,0,c.width,c.height); ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.45;p.a+=0.2; x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);x.restore();}); if(++f<70) requestAnimationFrame(step); else {x.clearRect(0,0,c.width,c.height); c.hidden=true;} }; step(); }
 /* read aloud */
-function speak(text){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text.replace(/\s+/g,' ').trim()); u.rate=0.95; speechSynthesis.speak(u);}catch(e){toast('Read aloud is not available in this browser.');} }
-function readBtn(getText){ if(!S||!S.settings.read) return ''; const id='rb'+Math.random().toString(36).slice(2,8); setTimeout(()=>{const b=document.getElementById(id); if(b) b.onclick=()=>speak(getText(b));},0); return `<button class="readbtn" id="${id}" type="button">${ico('speaker')} Read aloud</button>`; }
+const TTS_OK='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window; let VOICES={};
+function pickVoice(lang){ if(VOICES[lang]!==undefined) return VOICES[lang]; let v=null; try{ const vs=speechSynthesis.getVoices(), re=new RegExp('^'+lang,'i'); v=vs.find(x=>re.test(x.lang)&&/Google|Natural|Samantha|Aria|Jenny|Paulina|Monica/i.test(x.name))||vs.find(x=>re.test(x.lang))||null; if(!vs.length) return null; }catch(e){} return VOICES[lang]=v; }
+if(TTS_OK){ try{ speechSynthesis.addEventListener('voiceschanged',()=>{VOICES={};}); }catch(e){} }
+function speak(text,lang='en'){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(String(text).replace(/\s+/g,' ').trim()); u.rate=SET.rate==='slow'?0.72:0.95; const v=pickVoice(lang); if(v) u.voice=v; u.lang=v?v.lang:(lang==='es'?'es-US':'en-US'); speechSynthesis.speak(u);}catch(e){toast('Read aloud is not available in this browser.');} }
+function readBtn(getText){ const id='rb'+Math.random().toString(36).slice(2,8); setTimeout(()=>{const b=document.getElementById(id); if(b) b.onclick=()=>speak(getText(b));},0); return `<button class="readbtn" id="${id}" type="button">${ico('speaker')} Read aloud</button>`; }
 /* Marty the lab assistant */
 function marty(host,html,{hint,eyebrow='Marty, lab assistant'}={}){ const d=document.createElement('div'); d.className='marty'; d.innerHTML=`${MARTY(64)}<div class="bubble"><div class="eyebrow">${eyebrow}</div><div>${html}</div>${hint?`<div style="margin-top:6px"><button class="hintbtn" type="button">${ico('bulb')} Give me a hint</button><div class="hintbox" hidden></div></div>`:''}</div>`; host.appendChild(d); if(hint){ const b=$('.hintbtn',d), box=$('.hintbox',d); b.onclick=()=>{ box.hidden=false; box.innerHTML=hint(); b.disabled=true; logHint(); }; } return d; }
 function logHint(){ S.hints.n++; const L=S.view.level; S.hints.byLevel[L]=(S.hints.byLevel[L]||0)+1; if(S.view.tab==='prove') S.hints.prove[L]=(S.hints.prove[L]||0)+1; save(); }
@@ -826,7 +940,7 @@ function renderLanding(){
 const HERO_TX=['The cell grows and copies its DNA.','DNA packs into chromosomes and the nuclear envelope breaks apart.','Chromosomes line up across the middle.','Sister chromatids move apart to opposite poles.','Two new nuclei form as the cell begins to pinch.','The cytoplasm splits: one cell is now two.'];
 function heroLoop(){ cancelAnimationFrame(heroRaf); const cv=$('#heroCv'), ctx=cv.getContext('2d'), rail=$('#heroRail'); const SP=0.27, HOLD=0.75; let pos=0.25, last=performance.now(), curPh=-1;
   if(!rail.children.length) rail.innerHTML=PHASES.map((p,i)=>`<button type="button" data-p="${i}" aria-label="${p}"><span class="f">${p}</span><span class="s">${p[0]}</span><i></i></button>`).join('');
-  const still=()=>document.body.classList.contains('rm')||matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const still=()=>reducedMotion();
   const size=()=>{ const dpr=Math.min(2,window.devicePixelRatio||1), w=Math.max(280,cv.clientWidth); cv.width=Math.round(w*dpr); cv.height=Math.round(w*dpr*500/800); };
   const paint=ts=>{ const t=Math.min(5.999,pos), ph=Math.floor(t); drawCellScene(ctx,t,cv.width,cv.height,{labels:false,time:still()?0:ts}); cv.style.opacity=pos>6+HOLD-0.12||pos<0.04?0:1;
     if(ph!==curPh){ curPh=ph; $('#heroPh').textContent=PHASES[ph]; $('#heroTx').textContent=HERO_TX[ph]; $$('button',rail).forEach((b,i)=>b.classList.toggle('on',i===ph)); } $$('button i',rail).forEach((b,i)=>b.style.width=(i<ph?100:i===ph?(t-ph)*100:0)+'%'); };
@@ -835,18 +949,143 @@ function heroLoop(){ cancelAnimationFrame(heroRaf); const cv=$('#heroCv'), ctx=c
   size(); window.onresize=()=>{ if(!$('#landing').hidden){ size(); paint(performance.now()); } };
   if(still()){ pos=2.95; paint(0); } else heroRaf=requestAnimationFrame(step);
 }
-function openStudent(name){ name=name.trim(); if(name.length<2){toast('Type your name first.');return;} S=store.load(name)||blankState(name); store.save(); $('#landing').hidden=true; $('#app').hidden=false; $('#whoName').textContent=S.name; applySettings(); go(S.view.level,S.view.tab); window.scrollTo(0,0); }
+function openStudent(name){ name=name.trim(); if(name.length<2){toast('Type your name first.');return;} S=store.load(name)||blankState(name); migrateOldSettings(); store.save(); $('#landing').hidden=true; $('#app').hidden=false; $('#whoName').textContent=S.name; applySettings(); go(S.view.level,S.view.tab); window.scrollTo(0,0); }
 $('#startBtn').onclick=()=>openStudent($('#nameIn').value);
 $('#nameIn').addEventListener('keydown',e=>{if(e.key==='Enter') openStudent($('#nameIn').value)});
 $('#topLogo').innerHTML=$('#heroIco').innerHTML=APP_ICON; $('#topLc').src=LC_LOGO; $('#lcLogoHero').src=LC_LOGO;
-$('#reportBtn').innerHTML=ico('report')+' Portfolio'; $('#backupBtn').innerHTML=ico('save')+' Backup'; $('#settingsBtn').innerHTML=ico('gear')+' Settings'; $('#switchBtn').innerHTML=ico('users')+' Switch';
-$('#switchBtn').onclick=()=>{store.save(); S=null; document.body.className=''; renderLanding();};
+$('#reportBtn').innerHTML=ico('report')+' Portfolio'; $$('[data-menu]').forEach(b=>{ b.innerHTML=ico('menu')+'<span>Menu</span>'; b.onclick=openMenu; });
+const doSwitch=()=>{store.save(); S=null; renderLanding();};
 $('#restoreIn').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ const v=JSON.parse(r.result); if(!v.name) throw 0; S=deepMerge(blankState(v.name),v); store.save(); toast('Backup restored for '+S.name); openStudent(S.name);}catch(err){toast('That file is not a Split Decision backup.');} }; r.readAsText(f); e.target.value=''; });
-$('#backupBtn').onclick=()=>{ const data=JSON.stringify(S); const url=URL.createObjectURL(new Blob([data],{type:'application/json'})); modal(`<h3>Backup your progress</h3><p>This file holds everything, including your animation frames. Keep it in your Google Drive, then use Restore on another computer.</p><a class="btn" href="${url}" download="${esc(slug(S.name))}-split-decision-backup.json">${ico('download')} Download backup file</a> <button class="btn sec" id="copyBk">Copy as text instead</button><p class="small muted" style="margin-top:10px">If the download button does nothing in this viewer, use Copy and paste the text into a Google Doc. You can paste it back later with Restore (save it as a .json file).</p>`); $('#copyBk').onclick=()=>{navigator.clipboard.writeText(data).then(()=>toast('Copied! Paste it somewhere safe.')).catch(()=>toast('Copy blocked here. Try the download button.'));}; };
-$('#settingsBtn').onclick=()=>{ modal(`<h3>Settings</h3><div class="eyebrow">Accommodations (IEP / 504 or anyone who wants them)</div><p class="small muted">Turn on whatever helps you learn. Which ones you used is listed on your portfolio artifact.</p><div style="display:grid;gap:8px">${ACC_DEFS.map(a=>`<label class="row" style="align-items:flex-start;gap:10px"><input type="checkbox" data-acc="${a[0]}" ${S.settings[a[0]]?'checked':''} style="margin-top:4px"><span><b>${a[1]}</b><br><span class="small muted">${a[2]}</span></span></label>`).join('')}</div><hr style="border:0;border-top:2px solid var(--line);margin:14px 0"><label class="row"><input type="checkbox" id="setBurn" ${S.settings.burnLabels?'checked':''}> Print the phase name onto each frame when exporting my animation</label><hr style="border:0;border-top:2px solid var(--line);margin:14px 0"><h4>Danger zone</h4><button class="btn bad sm" id="resetMe">Erase all my progress on this device</button><div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn" id="setClose">Done</button></div>`);
-  $$('[data-acc]').forEach(c=>c.onchange=e=>{S.settings[c.dataset.acc]=e.target.checked;applySettings();save();}); $('#setBurn').onchange=e=>{S.settings.burnLabels=e.target.checked;save();}; $('#setClose').onclick=()=>{closeModal(); go(S.view.level,S.view.tab);}; $('#resetMe').onclick=()=>confirmBox('Erase everything for '+S.name+'? This cannot be undone.',()=>{try{localStorage.removeItem(KEY+slug(S.name));}catch(e){} S=null; document.body.className=''; renderLanding();}); };
-function applySettings(){ const b=document.body; b.classList.toggle('rm',!!S.settings.reduced); b.classList.toggle('a-big',!!S.settings.big); b.classList.toggle('a-space',!!S.settings.space); b.classList.toggle('a-hc',!!S.settings.hc); }
-function accUsed(){ return ACC_DEFS.filter(a=>S.settings[a[0]]&&a[0]!=='hints'&&a[0]!=='reduced').map(a=>a[1]); }
+const doBackup=()=>{ const data=JSON.stringify(S); const url=URL.createObjectURL(new Blob([data],{type:'application/json'})); modal(`<h3>Backup your progress</h3><p>This file holds everything, including your animation frames. Keep it in your Google Drive, then use Restore on another computer.</p><a class="btn" href="${url}" download="${esc(slug(S.name))}-split-decision-backup.json">${ico('download')} Download backup file</a> <button class="btn sec" id="copyBk">Copy as text instead</button><p class="small muted" style="margin-top:10px">If the download button does nothing in this viewer, use Copy and paste the text into a Google Doc. You can paste it back later with Restore (save it as a .json file).</p>`); $('#copyBk').onclick=()=>{navigator.clipboard.writeText(data).then(()=>toast('Copied! Paste it somewhere safe.')).catch(()=>toast('Copy blocked here. Try the download button.'));}; };
+/* ===================== SETTINGS MENU =====================
+   Display and accessibility settings belong to the device (key splitDecision.settings), so they work on the landing page
+   and stay put when students switch. Hints, fewer choices and the frame-label option belong to the student (S.settings). */
+const SET_KEY='splitDecision.settings', SET_DEF={text:'normal',theme:'auto',hc:'off',motion:'full',tts:'off',rate:'normal',dys:'off',ruler:'off',cvd:'default',words:'off',lang:'en'};
+var SET=(()=>{ try{ return Object.assign({},SET_DEF,JSON.parse(localStorage.getItem(SET_KEY)||'{}')); }catch(e){ return Object.assign({},SET_DEF); } })();
+function reducedMotion(){ return !!SET&&SET.motion==='reduce'; }
+function saveSettings(){ try{ localStorage.setItem(SET_KEY,JSON.stringify(SET)); }catch(e){} }
+function applySettings(){ const d=document.documentElement;
+  if(SET.theme==='auto') d.removeAttribute('data-theme'); else d.dataset.theme=SET.theme;
+  if(SET.text==='normal') d.removeAttribute('data-text'); else d.dataset.text=SET.text;
+  d.classList.toggle('rm',reducedMotion()); d.classList.toggle('cb',SET.cvd==='cb'); d.classList.toggle('dys',SET.dys==='on'); d.classList.toggle('hc',SET.hc==='on'); d.classList.toggle('tts',TTS_OK&&SET.tts==='on');
+  ruler(SET.ruler==='on'); if(SET.tts!=='on'){ try{speechSynthesis.cancel();}catch(e){} hideSayPop(); }
+  if(SET.words==='on') glossSoon(); else unGloss(); }
+function setSetting(k,v){ if(SET[k]===v) return; SET[k]=v; saveSettings(); applySettings();
+  if(k==='text'||k==='dys') requestAnimationFrame(()=>dispatchEvent(new Event('resize')));
+  if(k==='lang'){ unGloss(); glossSoon(); }
+  if(k==='motion'&&!$('#landing').hidden) heroLoop(); }
+function migrateOldSettings(){ const o=S.settings; let ch=false; [['big','text','large'],['space','dys','on'],['hc','hc','on'],['read','tts','on'],['reduced','motion','reduce']].forEach(([a,k,v])=>{ if(a in o){ if(o[a]===true&&a!==k){ SET[k]=v; ch=true; } else if(o[a]===true&&a===k){ SET[k]=v; ch=true; } delete o[a]; } }); if(ch) saveSettings(); }
+function accUsed(){ const out=ACC_DEFS.filter(a=>S.settings[a[0]]&&a[0]!=='hints').map(a=>a[1]);
+  if(SET.text!=='normal') out.push('Larger text'); if(SET.hc==='on') out.push('High contrast'); if(SET.tts==='on') out.push('Read aloud'); if(SET.dys==='on') out.push('Dyslexia-friendly text'); if(SET.ruler==='on') out.push('Reading ruler'); if(SET.cvd==='cb') out.push('Color-blind friendly colors'); if(SET.words==='on') out.push(SET.lang==='es'?'Word help with Spanish':'Word help'); return out; }
+/* reading ruler: a soft gold band that follows the pointer or finger */
+let RULER=null; const rulerAt=y=>{ if(RULER) RULER.style.transform=`translateY(${Math.round(y)}px)`; }, rulerPtr=e=>rulerAt(e.clientY), rulerTouch=e=>{ const t=e.touches&&e.touches[0]; if(t) rulerAt(t.clientY); };
+function ruler(on){ if(on&&!RULER){ RULER=document.createElement('div'); RULER.className='ruler'; RULER.setAttribute('aria-hidden','true'); document.body.appendChild(RULER); rulerAt(innerHeight*.45); addEventListener('pointermove',rulerPtr,{passive:true}); addEventListener('pointerdown',rulerPtr,{passive:true}); addEventListener('touchmove',rulerTouch,{passive:true}); }
+  else if(!on&&RULER){ RULER.remove(); RULER=null; removeEventListener('pointermove',rulerPtr); removeEventListener('pointerdown',rulerPtr); removeEventListener('touchmove',rulerTouch); } }
+/* read aloud: select any text and a Read aloud button appears */
+let sayPop=null, sayT=null; function hideSayPop(){ if(sayPop){ sayPop.remove(); sayPop=null; } }
+document.addEventListener('selectionchange',()=>{ clearTimeout(sayT); sayT=setTimeout(()=>{ if(!TTS_OK||SET.tts!=='on') return hideSayPop(); const sel=getSelection(), txt=sel?String(sel).trim():''; if(txt.length<2||!sel.rangeCount) return hideSayPop(); const r=sel.getRangeAt(0).getBoundingClientRect(); if(!r.width&&!r.height) return hideSayPop();
+  if(!sayPop){ sayPop=document.createElement('button'); sayPop.type='button'; sayPop.className='saypop'; sayPop.innerHTML=ico('speaker')+' Read aloud'; sayPop.addEventListener('pointerdown',e=>e.preventDefault()); document.body.appendChild(sayPop); }
+  sayPop.onclick=()=>speak(txt); sayPop.style.left=Math.max(8,Math.min(innerWidth-150,r.left))+'px'; sayPop.style.top=(r.bottom+8>innerHeight-50?Math.max(8,r.top-46):r.bottom+8)+'px'; },250); });
+/* ===================== WORD HELP (language support) =====================
+   Key vocabulary gets a dotted underline; tapping a word shows a plain definition, the Spanish word and meaning (if chosen), and can read it aloud. */
+const GLOSS=[
+ ['asexual reproduction','asexual reproduction','Making a new organism from one parent. The offspring is a genetic copy.','reproducción asexual','Formar un nuevo organismo a partir de un solo progenitor. La cría es una copia genética.'],
+ ['nuclear envelope','nuclear envelopes?','The double membrane that surrounds the nucleus.','envoltura nuclear','La doble membrana que rodea el núcleo.'],
+ ['cleavage furrow','cleavage furrows?','The groove that pinches an animal cell in two.','surco de división','La hendidura que estrangula una célula animal hasta partirla en dos.'],
+ ['daughter cells','daughter cells?','The two new cells made when one cell divides.','células hijas','Las dos células nuevas que se forman cuando una célula se divide.'],
+ ['spindle fibers','spindle fibers?|spindle','Thin protein threads that pull the chromosomes apart.','fibras del huso','Hilos delgados de proteína que separan los cromosomas.'],
+ ['cell membrane','cell membranes?|membranes?','The thin outer layer of a cell. Everything going in or out must cross it.','membrana celular','La capa externa y delgada de la célula. Todo lo que entra o sale debe cruzarla.'],
+ ['surface area','surface areas?','The total area of the outside of an object. For a cell, it is the membrane.','área de superficie','El área total del exterior de un objeto. En una célula, es la membrana.'],
+ ['cell cycle','cell cycles?','The repeating life of a cell: grow, copy the DNA, divide.','ciclo celular','La vida repetida de una célula: crecer, copiar el ADN y dividirse.'],
+ ['cell plate','cell plates?','The new wall a plant cell builds across its middle to divide.','placa celular','La pared nueva que una célula vegetal construye en el centro para dividirse.'],
+ ['cytokinesis','cytokinesis','The cytoplasm splits, finishing two separate cells.','citocinesis','El citoplasma se divide y quedan dos células separadas.'],
+ ['interphase','interphase','The long part of the cell cycle when the cell grows and copies its DNA.','interfase','La parte larga del ciclo celular en la que la célula crece y copia su ADN.'],
+ ['chromosome','chromosomes?','A tightly packed piece of DNA that you can see during cell division.','cromosoma','Un trozo de ADN muy compactado que se puede ver durante la división celular.'],
+ ['centromere','centromeres?','The spot where two sister chromatids are joined.','centrómero','El punto donde se unen las dos cromátidas hermanas.'],
+ ['centrosome','centrosomes?','The structure that organizes the spindle fibers.','centrosoma','La estructura que organiza las fibras del huso.'],
+ ['chromatid','sister chromatids?|chromatids?','One of the two identical copies that make up a copied chromosome.','cromátida','Una de las dos copias idénticas que forman un cromosoma duplicado.'],
+ ['chromatin','chromatin','Loose, spread-out DNA inside the nucleus.','cromatina','ADN suelto y extendido dentro del núcleo.'],
+ ['metaphase','metaphase','Chromosomes line up across the middle of the cell.','metafase','Los cromosomas se alinean en el centro de la célula.'],
+ ['telophase','telophase','Two new nuclei form, one at each end of the cell.','telofase','Se forman dos núcleos nuevos, uno en cada extremo de la célula.'],
+ ['cytoplasm','cytoplasm','The jelly-like material that fills a cell.','citoplasma','El material gelatinoso que llena la célula.'],
+ ['diffusion','diffusion|diffuses?','Particles spreading from where there are many to where there are few.','difusión','El movimiento de partículas desde donde hay muchas hacia donde hay pocas.'],
+ ['nutrients','nutrients?','Materials a cell needs to live, such as sugar.','nutrientes','Materiales que la célula necesita para vivir, como el azúcar.'],
+ ['prophase','prophase','Chromosomes condense and the nuclear envelope breaks down.','profase','Los cromosomas se condensan y la envoltura nuclear se deshace.'],
+ ['anaphase','anaphase','Sister chromatids are pulled apart to opposite ends of the cell.','anafase','Las cromátidas hermanas se separan hacia extremos opuestos de la célula.'],
+ ['organism','organisms?','A living thing.','organismo','Un ser vivo.'],
+ ['mitosis','mitosis','Division of the nucleus that gives each new cell a full, identical set of chromosomes.','mitosis','División del núcleo que da a cada célula nueva un juego completo e idéntico de cromosomas.'],
+ ['nucleus','nucleus|nuclei','The part of the cell that holds the DNA.','núcleo','La parte de la célula que contiene el ADN.'],
+ ['volume','volumes?','How much space an object takes up. For a cell, it is everything inside.','volumen','El espacio que ocupa un objeto. En una célula, es todo lo que hay dentro.'],
+ ['ratio','ratios?','A comparison of two numbers by division.','razón','Una comparación de dos números mediante una división.'],
+ ['waste','wastes?','Leftover materials a cell must get rid of.','desechos','Materiales sobrantes que la célula debe eliminar.'],
+ ['DNA','DNA','The molecule that carries the instructions for a cell.','ADN','La molécula que lleva las instrucciones de la célula.']
+];
+const GRE=new RegExp('\\b(?:'+GLOSS.map(g=>g[1]).join('|')+')\\b','gi'), GFULL=GLOSS.map(g=>new RegExp('^(?:'+g[1]+')$','i')), GSKIP='button,select,option,input,textarea,svg,canvas,sav-fig,label,.gw,.formula,.tabs,.dots,script,style';
+let glossT=null, glossObs=null;
+function glossSoon(){ if(!SET||SET.words!=='on'||glossT) return; glossT=setTimeout(()=>{ glossT=null; glossify(); },320); }
+function unGloss(){ closeGpop(); $$('.gw').forEach(e=>e.replaceWith(document.createTextNode(e.textContent))); }
+function glossify(){ const root=$('#view'); if(!root||SET.words!=='on') return; if(glossObs) glossObs.disconnect();
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), nodes=[]; while(w.nextNode()){ const n=w.currentNode; if(n.nodeValue.trim().length>2&&n.parentElement&&!n.parentElement.closest(GSKIP)) nodes.push(n); }
+  const have=new Set($$('.gw',root).map(e=>e.dataset.g));
+  nodes.forEach(n=>{ let m; GRE.lastIndex=0; while(n&&(m=GRE.exec(n.nodeValue))){ const k=GFULL.findIndex(r=>r.test(m[0])); if(k<0||have.has(String(k))) continue; have.add(String(k)); const mid=n.splitText(m.index), rest=mid.splitText(m[0].length), sp=document.createElement('span'); sp.className='gw'; sp.dataset.g=k; sp.tabIndex=0; sp.setAttribute('role','button'); sp.setAttribute('aria-label',m[0]+': word help'); sp.textContent=mid.nodeValue; mid.replaceWith(sp); n=rest; GRE.lastIndex=0; } });
+  if(!glossObs) glossObs=new MutationObserver(glossSoon); glossObs.observe($('#panel'),{childList:true,subtree:true,characterData:true}); }
+let gpop=null; function closeGpop(){ if(gpop){ gpop.remove(); gpop=null; } }
+function openGpop(el){ closeGpop(); const g=GLOSS[+el.dataset.g]; if(!g) return; gpop=document.createElement('div'); gpop.className='gpop'; gpop.setAttribute('role','dialog'); gpop.setAttribute('aria-label','Word help: '+g[0]);
+  gpop.innerHTML=`<h4>${g[0]}</h4><p>${g[2]}</p>${SET.lang==='es'?`<p class="es" lang="es"><b>${g[3]}</b><br>${g[4]}</p>`:''}<div class="row" style="gap:6px">${TTS_OK?`<button class="btn sm sec" type="button" data-say="en">${ico('speaker')} Hear it</button>${SET.lang==='es'?`<button class="btn sm sec" type="button" data-say="es">${ico('speaker')} Español</button>`:''}`:''}<button class="btn sm" type="button" data-x>Close</button></div>`;
+  document.body.appendChild(gpop); const r=el.getBoundingClientRect(), w=gpop.offsetWidth, h=gpop.offsetHeight; gpop.style.left=Math.max(12,Math.min(scrollX+innerWidth-w-12,scrollX+r.left))+'px'; gpop.style.top=(r.bottom+h+12>innerHeight&&r.top-h-8>0?scrollY+r.top-h-8:scrollY+r.bottom+8)+'px';
+  $$('[data-say]',gpop).forEach(b=>b.onclick=()=>b.dataset.say==='es'?speak(g[3]+'. '+g[4],'es'):speak(g[0]+'. '+g[2])); $('[data-x]',gpop).onclick=()=>{ closeGpop(); el.focus({preventScroll:true}); }; $('[data-x]',gpop).focus({preventScroll:true}); }
+document.addEventListener('click',e=>{ const t=e.target.closest&&e.target.closest('.gw'); if(t){ e.preventDefault(); e.stopPropagation(); openGpop(t); } else if(gpop&&!gpop.contains(e.target)) closeGpop(); },true);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&gpop) closeGpop(); else if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('gw')){ e.preventDefault(); openGpop(e.target); } });
+function openWordBank(){ const es=SET.lang==='es'; modal(`<div class="row" style="justify-content:space-between"><h3 style="margin:0">Word bank</h3><button class="btn sm" id="wbX">Close</button></div><p class="small muted" style="margin:6px 0 0">The key words for Standard 3.2${es?', in English and Spanish':''}.${TTS_OK?' Tap a word to hear it.':''}</p><dl class="gloss">${GLOSS.slice().sort((a,b)=>a[0].localeCompare(b[0])).map(g=>`<div><dt><button type="button" class="readbtn" style="display:inline-flex;border:0;padding:0;background:none;font-size:1rem;text-transform:capitalize;text-align:left" data-w="${esc(g[0])}">${g[0]}</button>${es?`<span class="es" lang="es">${g[3]}</span>`:''}</dt><dd>${g[2]}${es?`<span class="es" lang="es">${g[4]}</span>`:''}</dd></div>`).join('')}</dl>`);
+  $('#wbX').onclick=closeModal; $$('[data-w]').forEach(b=>b.onclick=()=>{ const g=GLOSS.find(x=>x[0]===b.dataset.w); speak(g[0]+'. '+g[2]); }); }
+/* the menu drawer: student actions, word bank and every setting */
+function openMenu(){ if($('.set-layer')) return; const opener=document.activeElement, signed=!!S;
+  const seg=(k,label,opts,note='')=>`<fieldset class="set-row"><legend>${label}</legend>${note?`<p class="set-note">${note}</p>`:''}<div class="set-seg">${opts.map(([v,t])=>`<label${SET[k]===v?' class="on"':''}><input type="radio" name="set-${k}" value="${v}"${SET[k]===v?' checked':''}>${t}</label>`).join('')}</div></fieldset>`;
+  const sw=(k,label,note,on,attr='data-sw')=>`<button type="button" class="set-sw" role="switch" ${attr}="${k}" aria-checked="${on}"><span><b>${label}</b><span class="set-note">${note}</span></span><span class="sw-track" aria-hidden="true"></span></button>`;
+  const body=`
+    ${signed?`<section class="set-sec"><h3>Signed in as ${esc(S.name)}</h3><div class="set-acts"><button class="btn sm" id="mPort" type="button">${ico('report')} Portfolio</button><button class="btn sm sec" id="mBack" type="button">${ico('save')} Backup</button><button class="btn sm sec" id="mSwitch" type="button">${ico('users')} Switch student</button></div></section>`:''}
+    <section class="set-sec"><h3>See it</h3>
+      ${seg('text','Text size',[['normal','<span style="font-size:1rem">A</span> Normal'],['large','<span style="font-size:1.25rem">A</span> Large'],['xl','<span style="font-size:1.5rem">A</span> Extra large']])}
+      ${seg('theme','Light or dark',[['auto','Match my device'],['light','Light'],['dark','Dark']])}
+      ${sw('hc','High contrast','Darker text and stronger outlines.',SET.hc==='on')}
+      ${seg('motion','Animations',[['full','Full'],['reduce','Calm']],'Calm stops moving backgrounds and auto-playing animations. You can still play each one yourself.')}
+    </section>
+    <section class="set-sec"><h3>Read it</h3>
+      ${TTS_OK?`${sw('tts','Read aloud','Speaker buttons read lessons and questions to you. Select any text to hear it, too.',SET.tts==='on')}
+      ${seg('rate','Reading speed',[['normal','Normal'],['slow','Slower']])}
+      <div style="margin-bottom:12px"><button type="button" class="btn sm sec" id="setHear">${ico('speaker')} Hear a sample</button></div>`:''}
+      ${sw('dys','Dyslexia-friendly text','A clearer font with more space between letters, words, and lines.',SET.dys==='on')}
+      ${sw('ruler','Reading ruler','A soft band follows your pointer or finger to help you keep your place.',SET.ruler==='on')}
+    </section>
+    <section class="set-sec"><h3>Language support</h3>
+      ${sw('words','Word help','Key science words get a dotted underline. Tap one for a short, plain definition.',SET.words==='on')}
+      ${seg('lang','Show words in my language too',[['en','English only'],['es','Español']],'Adds the Spanish word and meaning to Word help and the Word bank.')}
+      <button class="btn sm sec" id="mWords" type="button">${ico('text')} Open the Word bank</button>
+    </section>
+    <section class="set-sec"><h3>Colors</h3>
+      ${seg('cvd','Color vision',[['default','Standard colors'],['cb','Color-blind friendly']],'Color-blind friendly uses blue and orange instead of green and red, and adds a check or X to every right and wrong answer.')}
+      <div class="set-preview q" aria-hidden="true"><span class="opt right">Right</span><span class="opt wrong">Wrong</span></div>
+    </section>
+    <section class="set-sec"><h3>Learning supports</h3><p class="set-note">For IEP and 504 plans, language plans, or anyone who wants them. The supports you use are listed on your portfolio.</p>
+      ${signed?ACC_DEFS.map(a=>sw(a[0],a[1],a[2]+' Applies from the next question.',!!S.settings[a[0]],'data-ss')).join('')+sw('burnLabels','Phase names on my movie','Prints the phase name onto each frame when you export your animation.',!!S.settings.burnLabels,'data-ss'):'<p class="set-note"><b>Sign in first</b> to turn Marty\'s hints or fewer answer choices on or off. Those two are saved with your name.</p>'}
+    </section>
+    <p class="set-foot">Settings stay on this device and never change your scores.</p>
+    <div class="set-acts"><button type="button" class="btn sm sec" id="setReset">${ico('refresh')} Reset all settings</button>${signed?`<button type="button" class="btn sm bad" id="resetMe">${ico('trash')} Erase my progress</button>`:''}</div>`;
+  const layer=document.createElement('div'); layer.className='set-layer'; layer.innerHTML=`<div class="set-scrim"></div><aside class="set-drawer" role="dialog" aria-modal="true" aria-labelledby="setT"><div class="set-head"><h2 id="setT">${ico('menu')} Menu</h2><button class="btn sm" id="setX" type="button">Done</button></div>${body}</aside>`;
+  document.body.appendChild(layer); const drawer=$('.set-drawer',layer);
+  const close=()=>{ layer.remove(); removeEventListener('keydown',kh,true); if(opener&&opener.isConnected&&opener.focus) opener.focus({preventScroll:true}); };
+  const kh=e=>{ if($('#modal')) return; if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); close(); return; } if(e.key!=='Tab') return; const f=$$('button,input',drawer).filter(x=>!x.disabled&&(x.offsetParent!==null||x.type==='radio')), i=f.indexOf(document.activeElement), a=f[0], z=f[f.length-1]; if(i<0){ e.preventDefault(); a.focus(); } else if(e.shiftKey&&document.activeElement===a){ e.preventDefault(); z.focus(); } else if(!e.shiftKey&&document.activeElement===z){ e.preventDefault(); a.focus(); } };
+  addEventListener('keydown',kh,true); $('.set-scrim',layer).onclick=close; $('#setX',layer).onclick=close; $('#setX',layer).focus();
+  $$('.set-seg input',layer).forEach(r=>r.onchange=()=>{ $$('label',r.closest('.set-seg')).forEach(l=>l.classList.toggle('on',l.contains(r))); setSetting(r.name.slice(4),r.value); });
+  $$('[data-sw]',layer).forEach(b=>b.onclick=()=>{ const on=b.getAttribute('aria-checked')!=='true'; b.setAttribute('aria-checked',on); setSetting(b.dataset.sw,on?'on':'off'); });
+  $$('[data-ss]',layer).forEach(b=>b.onclick=()=>{ const on=b.getAttribute('aria-checked')!=='true'; b.setAttribute('aria-checked',on); S.settings[b.dataset.ss]=on; save(); });
+  const hear=$('#setHear',layer); if(hear) hear.onclick=()=>speak('This is how lessons and questions will sound. One cell divides into two identical daughter cells.');
+  $('#mWords',layer).onclick=()=>{ close(); openWordBank(); };
+  if(signed){ $('#mPort',layer).onclick=()=>{ close(); $('#reportBtn').click(); }; $('#mBack',layer).onclick=()=>{ close(); doBackup(); }; $('#mSwitch',layer).onclick=()=>{ close(); doSwitch(); };
+    $('#resetMe',layer).onclick=()=>confirmBox('Erase everything for '+S.name+'? This cannot be undone.',()=>{ try{localStorage.removeItem(KEY+slug(S.name));}catch(e){} S=null; close(); renderLanding(); }); }
+  $('#setReset',layer).onclick=()=>{ Object.assign(SET,SET_DEF); saveSettings(); applySettings(); dispatchEvent(new Event('resize')); close(); toast('Settings reset.'); if(!$('#landing').hidden) heroLoop(); };
+}
+applySettings();
 
 /* ===================== ROUTING ===================== */
 const LEVELS={
@@ -856,8 +1095,11 @@ const LEVELS={
 };
 const lessonLen=n=>({1:L1_LESSON.length,2:L2_LESSON.length,3:L3_LESSON.length}[n]);
 function levelProgress(n){ const L=S['l'+n]; let p=(L.learn.done.length/lessonLen(n))*40; p+=Math.min(1,L.practice.answered/(n===3?2:8))*20; if(n===1){ p+=Math.min(1,S.l1.studio.frames.length/MIN_FRAMES)*20; p+=L.prove.best?20:0; } else p+=L.prove.best?40:0; return Math.round(p); }
-function renderRail(){ $('#rail').innerHTML=[1,2,3].map(n=>{const o=S['l'+n].prove.best; return `<button class="lvl ${S.view.level===n?'on':''}" data-l="${n}"><span class="t">${ico(LEVELS[n].icon)} ${LEVELS[n].name}</span><span class="s">${LEVELS[n].sub}</span><span class="bar"><i style="width:${levelProgress(n)}%"></i></span><span class="s">${o?`Best checkpoint: ${o.pts}/${POINTS['l'+n]}`:'Checkpoint not tried yet'}</span></button>`}).join('')+`<div class="card soft" style="margin-top:6px"><div class="eyebrow">Overall</div><div class="score">${overall(S).pct}%</div><div class="small muted">Unit review progress: lessons, practice, checkpoints and your animation.</div></div>`; $$('.lvl',$('#rail')).forEach(b=>b.onclick=()=>go(+b.dataset.l,'learn')); }
-function go(level,tab){ S.view={level,tab}; save(); renderRail(); const P=$('#panel'); const tabs=LEVELS[level].tabs; const L=S['l'+level]; const doneMark=t=>(t==='prove'&&L.prove.best)||(t==='learn'&&L.learn.done.length>=lessonLen(level))?` <span class="ck">${ico('check')}</span>`:''; P.innerHTML=`<div class="tabs">${Object.entries(tabs).map(([k,v])=>`<button data-t="${k}" class="${k===tab?'on':''}">${v}${doneMark(k)}</button>`).join('')}</div><div id="view"></div>`; $$('.tabs button',P).forEach(b=>b.onclick=()=>go(level,b.dataset.t)); const V=$('#view'); const fn={1:{learn:L1_learn,practice:L1_practice,studio:L1_studio,prove:L1_prove},2:{learn:L2_learn,practice:L2_practice,prove:L2_prove},3:{learn:L3_learn,practice:L3_practice,prove:L3_prove}}[level][tab]; fn(V); window.scrollTo({top:0}); try{speechSynthesis.cancel();}catch(e){} }
+function renderRail(){ if(!S) return; const nav=$('#lvlnav');
+  nav.innerHTML=[1,2,3].map(n=>{ const o=S['l'+n].prove.best, p=levelProgress(n), nm=LEVELS[n].name.split(' · ')[1]; return `<button class="lv ${S.view.level===n?'on':''}" data-l="${n}" ${S.view.level===n?'aria-current="page"':''} title="${esc(LEVELS[n].name+': '+LEVELS[n].sub+' · '+p+'% done')}"><span class="ring" style="--p:${p}"><b>${n}</b>${o?`<span class="dn">${ico('check')}</span>`:''}</span><span class="lt"><small>Level ${n}</small>${nm}</span></button>`; }).join('');
+  $$('.lv',nav).forEach(b=>b.onclick=()=>go(+b.dataset.l,'learn'));
+  const st=$('#lvstat'); if(st){ const n=S.view.level, o=S['l'+n].prove.best, p=levelProgress(n); st.innerHTML=`<span>${LEVELS[n].sub}</span><span>Level ${n} <b>${p}%</b><span class="pbar"><i style="width:${p}%"></i></span></span><span>${o?`Best checkpoint <b>${o.pts}/${POINTS['l'+n]}</b>`:'Checkpoint not tried yet'}</span><span>Overall <b>${overall(S).pct}%</b></span>`; } }
+function go(level,tab){ S.view={level,tab}; save(); const P=$('#panel'); const tabs=LEVELS[level].tabs; const L=S['l'+level]; const doneMark=t=>(t==='prove'&&L.prove.best)||(t==='learn'&&L.learn.done.length>=lessonLen(level))?` <span class="ck">${ico('check')}</span>`:''; P.innerHTML=`<div class="tabsrow"><div class="tabs">${Object.entries(tabs).map(([k,v])=>`<button data-t="${k}" class="${k===tab?'on':''}">${v}${doneMark(k)}</button>`).join('')}</div><div class="lvstat" id="lvstat"></div></div><div id="view"></div>`; renderRail(); $$('.tabs button',P).forEach(b=>b.onclick=()=>go(level,b.dataset.t)); const V=$('#view'); const fn={1:{learn:L1_learn,practice:L1_practice,studio:L1_studio,prove:L1_prove},2:{learn:L2_learn,practice:L2_practice,prove:L2_prove},3:{learn:L3_learn,practice:L3_practice,prove:L3_prove}}[level][tab]; fn(V); window.scrollTo({top:0}); try{speechSynthesis.cancel();}catch(e){} glossSoon(); }
 
 /* ===================== LESSON STEPPER ===================== */
 function lesson(V,levelN,steps){
@@ -1193,7 +1435,7 @@ function jobAnim(wrap,def){
   let raf=null, t0=0; const A={state:'idle'};
   const paint=(p,t)=>{ ctx.setTransform(k,0,0,k,0,0); ctx.clearRect(0,0,W,H); def.draw(ctx,p,W,H,t); cap.textContent=def.caption(p); };
   const stop=()=>{ if(raf) cancelAnimationFrame(raf); raf=null; };
-  A.play=()=>{ stop(); tap.hidden=true; if(document.body.classList.contains('rm')){ A.state='done'; paint(1,def.dur); btn.hidden=false; return; } A.state='playing'; btn.hidden=true; t0=performance.now();
+  A.play=()=>{ stop(); tap.hidden=true; if(reducedMotion()){ A.state='done'; paint(1,def.dur); btn.hidden=false; return; } A.state='playing'; btn.hidden=true; t0=performance.now();
     const step=ts=>{ const t=ts-t0, p=Math.min(1,t/def.dur); paint(p,t); if(p<1) raf=requestAnimationFrame(step); else { A.state='done'; btn.hidden=false; raf=null; } }; raf=requestAnimationFrame(step); };
   A.paint=paint; paint(0,0); btn.onclick=e=>{ e.stopPropagation(); A.play(); }; return A;
 }
@@ -1495,21 +1737,23 @@ function studioRubric(frames){
 const PALETTE=['#dff1fb','#2a6f9e','#15345A','#4B9CD3','#87CEEB','#7c3aed','#c026d3','#e11d48','#f59e0b','#fde9b8','#c98a1e','#fde047','#22c55e','#a16207','#000000','#ffffff'];
 function L1_studio(V){
   const ST=S.l1.studio; ST.frames.forEach(migrateFrame); if(!ST.frames.length){ST.frames.push(newFrame());ST.cur=0;} ST.cur=Math.min(ST.cur||0,ST.frames.length-1);
-  V.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h2 style="margin:0">Make your mitosis movie</h2><button class="hintbtn" type="button" id="tipsBtn" aria-expanded="false">${ico('bulb')} Tips from Marty</button></div><div id="tipsBox" hidden><div id="mHost"></div></div>
+  V.innerHTML=`<div class="card studio-card"><h2 class="sr">Make your mitosis movie</h2><div id="tipsBox" hidden><div id="mHost"></div></div>
   <div class="studio">
     <div>
       <div class="eyebrow">Stamps · tap one, then tap the stage</div><div class="stamps" id="stamps">${STAMP_DEFS.map(s=>`<button data-stamp="${s.type}" title="${esc(s.tip)}"><canvas width="84" height="60" data-pv="${s.type}"></canvas><span>${s.label}</span></button>`).join('')}</div>
     </div>
     <div>
+      <div class="stagewrap">
+      <div class="toolbar vtools" id="tools"><button data-tool="select" class="on" title="Select and move objects">${ico('arrow')} Select</button><button data-tool="pencil" title="Pencil">${ico('pencil')} Pencil</button><button data-tool="line" title="Straight line">${ico('line')} Line</button><button data-tool="fill" title="Fill an area">${ico('fill')} Fill</button><button data-tool="eraser" title="Eraser">${ico('eraser')} Eraser</button><button data-tool="text" title="Add text">${ico('text')} Text</button><span class="sep"></span><button class="tb" id="undoBtn" title="Undo">${ico('undo')} Undo</button><button class="tb" id="clearBtn" title="Clear this frame">${ico('x')} Clear</button></div>
       <div class="stage" id="stage"><canvas class="onion" id="onion" width="${CW}" height="${CH}"></canvas><canvas id="objs" width="${CW}" height="${CH}"></canvas><canvas id="draw" width="${CW}" height="${CH}"></canvas><canvas id="prev" width="${CW}" height="${CH}"></canvas><div class="hud" id="hud"></div></div>
-      <div class="toolbar" id="tools"><button data-tool="select" class="on" title="Select and move objects">${ico('arrow')} Select</button><button data-tool="pencil" title="Pencil">${ico('pencil')} Pencil</button><button data-tool="line" title="Straight line">${ico('line')} Line</button><button data-tool="fill" title="Fill an area">${ico('fill')} Fill</button><button data-tool="eraser" title="Eraser">${ico('eraser')} Eraser</button><button data-tool="text" title="Add text">${ico('text')} Text</button><span class="sep"></span><button class="tb" id="undoBtn" title="Undo">${ico('undo')} Undo</button><button class="tb" id="clearBtn" title="Clear this frame">${ico('x')} Clear</button></div>
+      </div>
       <div class="toolbar"><span class="small muted">Ink</span><div class="swatches" id="sw" title="Ink color"></div><label class="small" title="Brush size">Size <input type="range" id="bsize" min="2" max="30" value="6" aria-label="Brush size"></label></div>
       <div class="filmstrip" id="strip"></div>
       <div class="row" style="gap:8px;justify-content:space-between"><div class="row" style="gap:4px"><button class="ibtn" id="dupBtn" title="Duplicate this frame" aria-label="Duplicate this frame">${ico('copy')}</button><button class="ibtn" id="addBtn" title="Add a blank frame" aria-label="Add a blank frame">${ico('plus')}</button><button class="ibtn" id="leftBtn" title="Move this frame earlier" aria-label="Move this frame earlier">${ico('left')}</button><button class="ibtn" id="rightBtn" title="Move this frame later" aria-label="Move this frame later">${ico('right')}</button><button class="ibtn bad" id="delBtn" title="Delete this frame" aria-label="Delete this frame">${ico('trash')}</button><button class="ibtn" id="onionBtn" title="Show the previous frame as a ghost" aria-label="Show the previous frame as a ghost" aria-pressed="false">${ico('eye')}</button><input type="checkbox" id="onionChk" class="sr" aria-hidden="true" tabindex="-1"></div><div class="row" style="gap:5px"><button class="btn sm gold" id="playBtn">${ico('play')} Play</button><label class="small" title="Playback speed" style="white-space:nowrap"><input type="range" id="fps" min="1" max="12" value="${ST.fps}" style="width:60px" aria-label="Playback speed"> <span id="fpsLbl">${ST.fps}</span> fps</label><button class="btn sm" id="gifBtn">${ico('download')} GIF</button><button class="btn sm" id="vidBtn">${ico('download')} Video</button></div></div>
       <div id="exportOut"></div>
     </div>
     <div>
-      <div class="card soft" id="progress" style="margin:0 0 12px;padding:12px 14px"><div class="eyebrow">Progress · ${MIN_FRAMES}-frame goal</div><div class="status" id="status" aria-live="polite"></div></div>
+      <button class="hintbtn" type="button" id="tipsBtn" aria-expanded="false" style="margin:0 0 10px;width:100%;justify-content:center">${ico('bulb')} Tips from Marty</button><div class="card soft" id="progress" style="margin:0 0 12px;padding:12px 14px"><div class="eyebrow">Progress · ${MIN_FRAMES}-frame goal</div><div class="status" id="status" aria-live="polite"></div></div>
       <div class="card soft" id="props" style="margin:0 0 12px"></div>
       <div class="card soft" id="guide" style="margin:0"><div class="eyebrow">This frame's phase</div><select id="phaseSel" aria-label="Phase shown in this frame"><option value="">— choose phase —</option>${PHASES.map(p=>`<option>${p}</option>`).join('')}</select><div id="guideBody"></div></div>
     </div>
@@ -1611,7 +1855,7 @@ function ratioText(a,b){ const g=gcd(a,b); return `${a/g}:${b/g}`; }
    and leave by the quickest door. On trash night each student carries their empty box out through a door too. 1 s = 5 story minutes.
    Text never sits on a building; HUD cards and pills sit on the lawn. */
 function deliveryProblem(host){
-  const W=960,H=540,RM=()=>document.body.classList.contains('rm');
+  const W=960,H=540,RM=()=>reducedMotion();
   const F='"Atkinson Hyperlegible", sans-serif', FD='Sora, "Atkinson Hyperlegible", sans-serif';
   const MIN=5, PHYS={T:.45,walk:3,eat:.8}, CAP=3, SP=13;
   const C={lawn:'#21504a',lawn2:'#123130',walk:'#5d757e',walkEdge:'#425a63',road:'#1d242d',roadEdge:'#3a4552',roadLine:'#e8c55a',

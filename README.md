@@ -21,3 +21,11 @@ Static site: `index.html` plus the `img/` folder. No build step.
 ## Editing
 
 Progress is saved per student in the browser (localStorage) under the student's name; students can back up and restore a JSON file from the top bar.
+
+## Navigation, menu and accessibility
+
+- The three proficiency levels are buttons in the top bar (each ring shows progress, a green check means the checkpoint is done). The tabs for the current level sit under the bar, so lessons and the Stop-Motion Studio get the full width of the screen.
+- The Menu button (three lines) is on the landing page and in the top bar. It holds Portfolio, Backup, Switch student, the Word bank and every setting.
+- Display and accessibility settings are saved per device under `splitDecision.settings`, so they work before sign-in: text size, light/dark, high contrast, calm animations, read aloud (with a slower speed and select-to-hear), dyslexia-friendly text (Lexend), reading ruler, color-blind friendly colors, and Word help with optional Spanish.
+- Hints, fewer answer choices and the frame-label option are saved with each student. Supports in use are listed on the portfolio.
+- The app never follows the device's reduced-motion preference; calm motion is chosen in the Menu.
