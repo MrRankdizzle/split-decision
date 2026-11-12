@@ -150,12 +150,13 @@ canvas.cell{width:min(100%,max(320px,calc((100vh - 400px)*800/520)));margin-inli
 @media (max-width:980px){.studio{grid-template-columns:1fr}.stamps{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}}
 .stamps button{flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:5px 3px;font-size:.7rem;line-height:1.15;gap:.25em}
 .stamps canvas{width:64px;height:46px;background:#fff;border-radius:6px}
-.stagewrap{display:flex;gap:10px;justify-content:center;align-items:flex-start}
-.stage{flex:0 1 max(400px,calc((100vh - 262px)*4/3));min-width:0}
-.vtools{flex:none;flex-direction:column;align-items:stretch;margin-top:0;gap:5px}
+.stagecol{width:100%;max-width:max(400px,calc((100vh - 262px)*4/3));margin-inline:auto}
+.stagewrap{display:block}.stage{width:100%}
+.toolbar.vtools{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:0}
 .vtools .sep{display:none}.vtools button{justify-content:flex-start}
+.stamps button{padding:4px 3px}.stamps canvas{width:56px;height:40px}
 .studio-card{padding:14px 16px}
-@media (max-width:980px){.stagewrap{flex-direction:column;align-items:stretch}.stage{flex:none;width:100%}.vtools{order:2;flex-direction:row;flex-wrap:wrap}}
+@media (max-width:980px){.stagecol{max-width:none}.toolbar.vtools{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (min-width:641px) and (max-width:980px){.toolbar.vtools{grid-template-columns:repeat(8,minmax(0,1fr))}}
 
 .tips{margin:0 0 10px;padding:6px 14px}
 .tips summary{display:flex;align-items:center;gap:.4em;font-size:.95rem}
@@ -1860,11 +1861,11 @@ function L1_studio(V){
   V.innerHTML=`<div class="card studio-card"><h2 class="sr">Make your mitosis movie</h2><div id="tipsBox" hidden><div id="mHost"></div></div>
   <div class="studio">
     <div>
-      <div class="eyebrow">Stamps · tap one, then tap the stage</div><div class="stamps" id="stamps">${STAMP_DEFS.map(s=>`<button data-stamp="${s.type}" title="${esc(s.tip)}"><canvas width="84" height="60" data-pv="${s.type}"></canvas><span>${s.label}</span></button>`).join('')}</div>
+      <div class="eyebrow" title="Tap a stamp, then tap the stage">Stamps · tap to place</div><div class="stamps" id="stamps">${STAMP_DEFS.map(s=>`<button data-stamp="${s.type}" title="${esc(s.tip)}"><canvas width="84" height="60" data-pv="${s.type}"></canvas><span>${s.label}</span></button>`).join('')}</div>
+      <div class="eyebrow" style="margin-top:10px">Tools</div><div class="toolbar vtools" id="tools"><button data-tool="select" class="on" title="Select and move objects">${ico('arrow')} Select</button><button data-tool="pencil" title="Pencil">${ico('pencil')} Pencil</button><button data-tool="line" title="Straight line">${ico('line')} Line</button><button data-tool="fill" title="Fill an area">${ico('fill')} Fill</button><button data-tool="eraser" title="Eraser">${ico('eraser')} Eraser</button><button data-tool="text" title="Add text">${ico('text')} Text</button><span class="sep"></span><button class="tb" id="undoBtn" title="Undo">${ico('undo')} Undo</button><button class="tb" id="clearBtn" title="Clear this frame">${ico('x')} Clear</button></div>
     </div>
-    <div>
+    <div class="stagecol">
       <div class="stagewrap">
-      <div class="toolbar vtools" id="tools"><button data-tool="select" class="on" title="Select and move objects">${ico('arrow')} Select</button><button data-tool="pencil" title="Pencil">${ico('pencil')} Pencil</button><button data-tool="line" title="Straight line">${ico('line')} Line</button><button data-tool="fill" title="Fill an area">${ico('fill')} Fill</button><button data-tool="eraser" title="Eraser">${ico('eraser')} Eraser</button><button data-tool="text" title="Add text">${ico('text')} Text</button><span class="sep"></span><button class="tb" id="undoBtn" title="Undo">${ico('undo')} Undo</button><button class="tb" id="clearBtn" title="Clear this frame">${ico('x')} Clear</button></div>
       <div class="stage" id="stage"><canvas class="onion" id="onion" width="${CW}" height="${CH}"></canvas><canvas id="objs" width="${CW}" height="${CH}"></canvas><canvas id="draw" width="${CW}" height="${CH}"></canvas><canvas id="prev" width="${CW}" height="${CH}"></canvas><div class="hud" id="hud"></div></div>
       </div>
       <div class="toolbar"><span class="small muted">Ink</span><div class="swatches" id="sw" title="Ink color"></div><label class="small" title="Brush size">Size <input type="range" id="bsize" min="2" max="30" value="6" aria-label="Brush size"></label></div>
