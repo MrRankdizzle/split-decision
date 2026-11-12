@@ -579,6 +579,7 @@ select{max-width:100%}
 @media (min-width:1181px){.viewer.locked .vphoto .photo img{height:250px;object-fit:cover}.viewer.locked .vphoto.two .photo img{height:auto}.viewer.locked:has(.vphoto.two){grid-template-columns:minmax(0,max(340px,min(40%,calc((100vh - 400px)*800/520)))) 244px minmax(0,1fr)}}
 .vphoto .photo{margin:0 0 8px}.vphoto .photo:last-child{margin-bottom:0}
 .vphoto.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch}.vphoto.two .photo{margin:0;min-width:0}
+@media (max-width:600px){.vphoto.two{grid-template-columns:1fr}}
 .vkey .legend{margin-top:2px}
 .pnstack{display:grid}.pnstack>*{grid-area:1/1;visibility:hidden;min-width:0}.pnstack>.on{visibility:visible}.pnstack p{margin-bottom:8px}
 @media (min-width:981px) and (max-width:1180px){.viewer.locked{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-areas:"anim key" "photo cmp";grid-template-rows:auto auto}.viewer.locked .vcmp{align-self:stretch}.vphoto .photo img{height:230px;object-fit:cover}.vphoto.two .photo img{height:auto}}
